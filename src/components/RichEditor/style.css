@@ -1,0 +1,5 @@
+.ck .ck-editor__editable {
+  min-height: 150px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.06);
+}
