@@ -22,7 +22,7 @@ import { NavbarProps } from './type';
 import { navbarLayoutSx } from './style';
 import { ExpandMore, Menu } from '@mui/icons-material';
 import { HomeOutlined, Settings } from '@mui/icons-material';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation, matchPath } from 'react-router-dom';
 import { IClassroom } from 'common/interfaces';
 import { ProfileBtn } from '../ProfileBtn';
 import { drawerConfigs } from 'configs';
@@ -34,8 +34,14 @@ export const Navbar = ({ children, loading, userData }: NavbarProps) => {
     threshold: 0,
   });
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const DrawerItem = (item: DrawerItemConfigType, isChildren: boolean): JSX.Element => {
+    let isActive: boolean = false;
+    if (item.href && matchPath(item.href, pathname)) {
+      isActive = true;
+    }
+
     if (item.type === 'group')
       return (
         <>
@@ -59,7 +65,7 @@ export const Navbar = ({ children, loading, userData }: NavbarProps) => {
       return (
         <>
           <ListItem>
-            <ListItemButton sx={navbarLayoutSx.btnItem} onClick={() => navigate(item.href ?? '')}>
+            <ListItemButton sx={navbarLayoutSx.btnItem} onClick={() => navigate(item.href ?? '')} className={isActive ? 'active' : ''}>
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.title} />
             </ListItemButton>

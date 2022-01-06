@@ -1,3 +1,4 @@
+import { blue } from '@mui/material/colors';
 import { SxType, MultipleSxTypes } from 'common/type';
 
 const drawerWidth = 300;
@@ -40,6 +41,16 @@ export const navbarLayoutSx: MultipleSxTypes = {
     fontWeight: 500,
     fontSize: 16,
     height: 56,
+
+    ':hover': {
+      color: 'primary.main',
+    },
+
+    '&.active': {
+      bgcolor: blue[50],
+      color: 'primary.main',
+      fontWeight: 600,
+    },
   },
 
   main: {

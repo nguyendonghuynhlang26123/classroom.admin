@@ -28,19 +28,19 @@ export const drawerConfigs: DrawerItemConfigType[] = [
       {
         title: 'User accounts',
         icon: <AccountCircleOutlined />,
-        href: '/',
+        href: '/user-account',
         type: 'item',
       },
       {
         title: 'Admin accounts',
         icon: <AdminPanelSettingsOutlined />,
-        href: '/',
+        href: '/admin-account',
         type: 'item',
       },
       {
         title: 'Black lists',
         icon: <BlockOutlined />,
-        href: '/',
+        href: '/blacklist',
         type: 'item',
       },
     ],
@@ -52,7 +52,7 @@ export const drawerConfigs: DrawerItemConfigType[] = [
       {
         title: 'Classrooms',
         icon: <SchoolOutlined />,
-        href: '/',
+        href: '/classroom',
         type: 'item',
       },
     ],

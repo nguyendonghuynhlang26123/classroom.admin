@@ -4,9 +4,13 @@ import React from 'react';
 import Utils from 'common/utils';
 import { LinearProgress } from '@mui/material';
 
+const MainLayout = React.lazy(() => import('./MainLayout'));
 // main screen
 const Dashboard = React.lazy(() => import('./Dashboard'));
-const MainLayout = React.lazy(() => import('./MainLayout'));
+const UserManagement = React.lazy(() => import('./Users'));
+const AdminManagement = React.lazy(() => import('./Admins'));
+const ClassroomManagement = React.lazy(() => import('./Classroom'));
+const BlacklistManagement = React.lazy(() => import('./Blacklist'));
 
 //Auth
 const LoginPage = React.lazy(() => import('./Auth/Login'));
@@ -57,6 +61,26 @@ const appRoutes = (isAuthed: boolean, search: string, pathname: string): RouteCo
           path: '/',
           index: true,
           element: <Dashboard />,
+        },
+        {
+          path: '/user-account',
+          index: true,
+          element: <UserManagement />,
+        },
+        {
+          path: '/admin-account',
+          index: true,
+          element: <AdminManagement />,
+        },
+        {
+          path: '/classroom',
+          index: true,
+          element: <ClassroomManagement />,
+        },
+        {
+          path: '/blacklist',
+          index: true,
+          element: <BlacklistManagement />,
         },
         {
           path: '/profile',
