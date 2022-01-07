@@ -1,5 +1,3 @@
-import { timeStamp } from 'console';
-
 class Utils {
   static filterArrayByString(mainArr: any[], searchText: string): any[] {
     if (searchText === '') {

@@ -1,32 +1,32 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
+import { ExpandMore } from '@mui/icons-material';
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  Container,
   Divider,
   Drawer,
   LinearProgress,
   List,
+  ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Box,
   Typography,
-  ListItem,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Avatar,
+  Breadcrumbs,
+  Link,
 } from '@mui/material';
-import { NavbarProps } from './type';
-import { navbarLayoutSx } from './style';
-import { ExpandMore, Menu } from '@mui/icons-material';
-import { HomeOutlined, Settings } from '@mui/icons-material';
-import { useNavigate, useLocation, matchPath } from 'react-router-dom';
-import { IClassroom } from 'common/interfaces';
-import { ProfileBtn } from '../ProfileBtn';
-import { drawerConfigs } from 'configs';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { DrawerItemConfigType } from 'common/type';
+import { drawerConfigs } from 'configs';
+import * as React from 'react';
+import { matchPath, useLocation, useNavigate } from 'react-router-dom';
+import { ProfileBtn } from '../ProfileBtn';
+import { navbarLayoutSx } from './style';
+import { NavbarProps } from './type';
 
 export const Navbar = ({ children, loading, userData }: NavbarProps) => {
   const trigger = useScrollTrigger({
@@ -106,7 +106,25 @@ export const Navbar = ({ children, loading, userData }: NavbarProps) => {
           </List>
         </Drawer>
         <Box component="main" sx={navbarLayoutSx.main}>
-          {children}
+          <Container>
+            <Typography className="breadcumbs-header">User list</Typography>
+            <Breadcrumbs separator="●" aria-label="breadcrumb">
+              <Link underline="hover" color="inherit" href="#">
+                Home
+              </Link>
+              <Link underline="hover" color="inherit" href="#">
+                Catalog
+              </Link>
+              <Link underline="hover" color="inherit" href="#">
+                Accessories
+              </Link>
+              <Link underline="hover" color="inherit" href="#">
+                New Collection
+              </Link>
+              <Typography color="text.primary">Belts</Typography>
+            </Breadcrumbs>
+            {children}
+          </Container>
         </Box>
       </Box>
     </React.Fragment>

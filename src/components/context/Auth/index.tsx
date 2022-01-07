@@ -1,4 +1,4 @@
-import { AuthData, AuthResponse, IUser } from 'common/interfaces';
+import { AuthData, IUser } from 'common/interfaces';
 import React from 'react';
 import { repository } from 'services/repository';
 import JwtAuthService from './jwt.service';

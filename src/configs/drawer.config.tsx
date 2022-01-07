@@ -1,14 +1,5 @@
+import { AccountCircleOutlined, AdminPanelSettingsOutlined, BlockOutlined, HomeOutlined, SchoolOutlined } from '@mui/icons-material';
 import { DrawerItemConfigType } from 'common/type';
-import {
-  AccountBoxOutlined,
-  AccountBoxTwoTone,
-  AccountCircleOutlined,
-  AdminPanelSettingsOutlined,
-  BlockOutlined,
-  ClassOutlined,
-  HomeOutlined,
-  SchoolOutlined,
-} from '@mui/icons-material';
 
 export const drawerConfigs: DrawerItemConfigType[] = [
   {

@@ -8,7 +8,7 @@ export const NoResourceDisplay = ({ title, description, img = Kite, direction = 
   return (
     <Stack direction={direction === 'column' ? 'column' : 'row-reverse'} sx={styleSx.root} spacing={1}>
       <Box sx={styleSx.imgContainer}>
-        <img src={img} />
+        <img src={img} alt="Empty resources" />
       </Box>
       <Stack
         direction="column"

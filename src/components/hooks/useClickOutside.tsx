@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 // Hook from https://usehooks.com
 export function useOnClickOutside(ref: any, handler: (ev: any) => any) {
   useEffect(

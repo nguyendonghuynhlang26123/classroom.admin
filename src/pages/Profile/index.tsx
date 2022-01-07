@@ -1,14 +1,14 @@
 //Profile
 import { PhotoCamera } from '@mui/icons-material';
-import { Avatar, Box, Button, CircularProgress, Container, Grid, LinearProgress, Stack, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Container, Grid, Stack, TextField, Typography } from '@mui/material';
 import { NAME_REGEX, STUDENT_ID_REGEX } from 'common/constants/regex';
-import { IUser, IUserBody } from 'common/interfaces';
+import { IUserBody } from 'common/interfaces';
 import Utils from 'common/utils';
-import { Navbar, useAuth, useLoading } from 'components';
+import { useAuth, useLoading } from 'components';
 import { useFormik } from 'formik';
 import React from 'react';
 import { toast } from 'react-toastify';
-import { useUpdateProfileMutation, useUploadImageMutation, useGetAllClassesQuery } from 'services/api';
+import { useUpdateProfileMutation, useUploadImageMutation } from 'services/api';
 import * as yup from 'yup';
 import { profileSx } from './style';
 
@@ -22,10 +22,9 @@ const UserProfile = () => {
   const { userData, reload } = useAuth();
   const [updateProfile, { isLoading }] = useUpdateProfileMutation();
   const [uploadAvatar, { isLoading: isUploading }] = useUploadImageMutation();
-  const { data: classrooms, isLoading: isFetchingClassrooms } = useGetAllClassesQuery();
   const [avatar, setAvatar] = React.useState<string | undefined>(userData?.avatar);
   const [uploadFile, setUploadFile] = React.useState<any>(null);
-  const [loading, setLoading] = useLoading();
+  const [, setLoading] = useLoading();
 
   const formik = useFormik({
     initialValues: {
@@ -50,8 +49,8 @@ const UserProfile = () => {
   });
 
   React.useEffect(() => {
-    setLoading(Utils.isLoading(isLoading, isUploading, isFetchingClassrooms));
-  }, [isLoading, isUploading, isFetchingClassrooms]);
+    setLoading(Utils.isLoading(isLoading, isUploading));
+  }, [isLoading, isUploading]);
 
   const handleUpdateData = async (id: string, values: IUserBody, file: any) => {
     let form_data = new FormData();

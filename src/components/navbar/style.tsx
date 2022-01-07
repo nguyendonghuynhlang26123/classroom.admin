@@ -1,5 +1,5 @@
 import { blue } from '@mui/material/colors';
-import { SxType, MultipleSxTypes } from 'common/type';
+import { MultipleSxTypes } from 'common/type';
 
 const drawerWidth = 300;
 const headerHeight = 64;
@@ -59,6 +59,23 @@ export const navbarLayoutSx: MultipleSxTypes = {
     px: 3,
     mt: `${headerHeight}px`,
     minHeight: `calc(100vh - ${headerHeight}px)`,
+
+    '& .breadcumbs-header': {
+      fontSize: 20,
+      fontWeight: 500,
+      mt: 4,
+    },
+
+    '& .MuiBreadcrumbs-root': {
+      fontSize: 14,
+
+      '& .MuiTypography-root': {},
+
+      '& .MuiBreadcrumbs-separator': {
+        mx: 1,
+        fontSize: 10,
+      },
+    },
   },
 
   accordionItem: {

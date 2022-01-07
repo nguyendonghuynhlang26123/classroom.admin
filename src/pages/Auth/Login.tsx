@@ -1,11 +1,11 @@
-import { Container, Grow, Paper, Typography, Box, Button, Divider, Link, Stack, TextField, CircularProgress } from '@mui/material';
-import React from 'react';
-import { sharedStyleSx } from './style';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-import { useAuth } from 'components/context';
-import { toast } from 'react-toastify';
+import { Box, Button, CircularProgress, Container, Grow, Paper, TextField, Typography } from '@mui/material';
 import { AuthData } from 'common/interfaces';
+import { useAuth } from 'components/context';
+import { useFormik } from 'formik';
+import React from 'react';
+import { toast } from 'react-toastify';
+import * as yup from 'yup';
+import { sharedStyleSx } from './style';
 
 const validationSchema = yup.object({
   email: yup.string().email('This field should be a valid email').required('Please enter email'),

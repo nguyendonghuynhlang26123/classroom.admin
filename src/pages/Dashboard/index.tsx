@@ -1,6 +1,4 @@
-import { Inbox, Mail } from '@mui/icons-material';
-import { IUser } from 'common/interfaces';
-import { Navbar, useAuth, useLoading } from 'components';
+import { useAuth, useLoading } from 'components';
 import React from 'react';
 
 const Dashboard = () => {
