@@ -1,4 +1,15 @@
-import { Box, Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  LinearProgress,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TablePagination,
+  TableRow,
+} from '@mui/material';
 import React from 'react';
 import { TableHeader } from './TableHeader';
 import { TableToolbar } from './TableToolbar';
@@ -6,7 +17,7 @@ import { DataTablePropType } from './type';
 import { tableSx } from './style';
 
 export const DataTable = (props: DataTablePropType) => {
-  const { rows, rowIds, headCells, fetchData, curPage, perPage, total, searchData, rowHeight } = props;
+  const { loading, rows, rowIds, headCells, fetchData, curPage, perPage, total, searchData, rowHeight } = props;
   const [order, setOrder] = React.useState<'asc' | 'desc'>('asc');
   const [orderBy, setOrderBy] = React.useState<string>('created_at');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -80,13 +91,20 @@ export const DataTable = (props: DataTablePropType) => {
             rowCount={rows.length}
           />
           <TableBody>
+            {loading && (
+              <TableRow>
+                <TableCell colSpan={headCells.length + 1} sx={{ p: 0 }}>
+                  <LinearProgress />
+                </TableCell>
+              </TableRow>
+            )}
             {rows.length === 0 ? (
               <TableRow
                 style={{
                   height: (rowHeight ?? 53) * emptyRows,
                 }}
               >
-                <TableCell colSpan={headCells.length} />
+                <TableCell colSpan={headCells.length + 1} />
               </TableRow>
             ) : (
               <>
@@ -124,7 +142,7 @@ export const DataTable = (props: DataTablePropType) => {
                       height: (rowHeight ?? 53) * emptyRows,
                     }}
                   >
-                    <TableCell colSpan={6} />
+                    <TableCell colSpan={headCells.length + 1} />
                   </TableRow>
                 )}
               </>

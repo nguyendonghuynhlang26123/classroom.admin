@@ -1,8 +1,8 @@
-import { More } from '@mui/icons-material';
-import { Avatar, Link, Stack, TableCell, Typography } from '@mui/material';
+import { Block, Delete, Edit, More, MoreVert } from '@mui/icons-material';
+import { Avatar, Chip, IconButton, Link, Stack, TableCell, Typography } from '@mui/material';
 import { IUser } from 'common/interfaces';
 import Utils from 'common/utils';
-import { AppBreadcrumbs, DataTable } from 'components';
+import { AppBreadcrumbs, DataTable, PopupMenu, useLoading } from 'components';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFetchAllUsersMutation } from 'services';
@@ -22,16 +22,22 @@ const headCells = [
     label: 'Email',
   },
   {
-    id: 'google_id',
-    numeric: false,
-    disablePadding: false,
-    label: 'Google id',
-  },
-  {
     id: 'student_id',
     numeric: true,
     disablePadding: false,
     label: 'Student id',
+  },
+  {
+    id: 'status',
+    numeric: false,
+    disablePadding: false,
+    label: 'Status',
+  },
+  {
+    id: 'google_id',
+    numeric: false,
+    disablePadding: false,
+    label: 'Google id',
   },
   {
     id: 'action',
@@ -102,10 +108,39 @@ const UserList = () => {
           </Stack>
         </TableCell>
         <TableCell align="left">{user.email}</TableCell>
-        <TableCell align="left">{user.google_id}</TableCell>
+        <TableCell align="left">{user.deleted_at && <Chip label="Deleted" color="warning" />}</TableCell>
         <TableCell align="right">{user.student_id}</TableCell>
+        <TableCell align="left">{user.google_id}</TableCell>
         <TableCell align="right">
-          <More />
+          <PopupMenu
+            items={[
+              {
+                label: 'Edit',
+                icon: <Edit color="primary" />,
+                colorMode: 'primary',
+                sx: { width: 150, color: 'primary.main' },
+                callback: () => navigate('/user-account/' + user._id),
+              },
+              {
+                label: 'Ban',
+                icon: <Block color="warning" />,
+                colorMode: 'warning',
+                sx: { width: 150, color: 'warning.main' },
+                callback: () => console.log('Bann'),
+              },
+              {
+                label: 'Delete',
+                icon: <Delete color="error" />,
+                colorMode: 'error',
+                sx: { width: 150, color: 'error.main' },
+                callback: () => console.log('DELETE'),
+              },
+            ]}
+          >
+            <IconButton>
+              <MoreVert />
+            </IconButton>
+          </PopupMenu>
         </TableCell>
       </>
     );
@@ -124,6 +159,7 @@ const UserList = () => {
         ]}
       />
       <DataTable
+        loading={isFetchingUsers}
         headCells={headCells}
         rows={rows}
         fetchData={fetchData}

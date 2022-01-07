@@ -25,6 +25,7 @@ export type TableHeaderProps = {
 };
 
 export type DataTablePropType = {
+  loading?: boolean;
   rows: JSX.Element[];
   rowIds: string[];
   headCells: HeadCell[];
