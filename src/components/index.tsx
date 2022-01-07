@@ -8,3 +8,4 @@ export * from './RichEditor';
 export * from './DateTimePicker';
 export * from './NoResourceDisplay';
 export * from './Breadcrumbs';
+export * from './DataTable';
