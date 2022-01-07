@@ -81,8 +81,8 @@ export const Navbar = ({ children, loading, userData }: NavbarProps) => {
       <Box sx={navbarLayoutSx.root}>
         <AppBar position="fixed" sx={navbarLayoutSx.appbar} elevation={trigger ? 4 : 0}>
           <Toolbar sx={navbarLayoutSx.toolbar}>
-            <Typography>Hello {userData.first_name},</Typography>
-            <ProfileBtn fname="Long" imageUrl={null} />
+            <Typography>Hello {userData.name},</Typography>
+            <ProfileBtn fname={userData.name} imageUrl={userData.avatar} />
           </Toolbar>
           {loading && <LinearProgress />}
         </AppBar>

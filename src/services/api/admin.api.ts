@@ -3,12 +3,12 @@ import { _request, queryToUrl } from './utils';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from '../repository';
 
-import type { IAdmin, IGenericGetAllResponse, IAdminUpdateBody } from 'common/interfaces';
+import type { IAdmin, IGenericGetAllResponse, IAdminUpdateBody, IAdminCreateBody } from 'common/interfaces';
 
 // Define a service using a base URL and expected endpoints
 export const ADMINS_API_REDUCER_KEY = 'adminsApi';
 export const ADMINS_TAG = 'Admins';
-export const usersApi = createApi({
+export const adminsApi = createApi({
   reducerPath: ADMINS_API_REDUCER_KEY,
   baseQuery: baseQuery,
   tagTypes: [ADMINS_TAG],
@@ -17,7 +17,7 @@ export const usersApi = createApi({
       query: (query: QueryType) => _request.get(queryToUrl(`admin/admin-accounts`, query)),
     }),
 
-    getUserDetails: builder.query<IAdmin, string>({
+    getAdminDetails: builder.query<IAdmin, string>({
       query: (id: string) => _request.get(`admin/admin-accounts/${id}`),
       providesTags: [{ type: ADMINS_TAG, id: 'DATA' }],
     }),
@@ -25,8 +25,8 @@ export const usersApi = createApi({
       query: ({ id, body }) => _request.put(`admin/admin-accounts/${id}`, body),
       invalidatesTags: [{ type: ADMINS_TAG, id: 'DATA' }],
     }),
-    createAdmin: builder.mutation<IAdmin, { id: string; body: IAdminUpdateBody }>({
-      query: ({ id, body }) => _request.put(`admin/admin-accounts/${id}`, body),
+    createAdmin: builder.mutation<IAdmin, IAdminCreateBody>({
+      query: (body) => _request.post(`admin/admin-accounts`, body),
       invalidatesTags: [{ type: ADMINS_TAG, id: 'DATA' }],
     }),
   }),
@@ -34,4 +34,4 @@ export const usersApi = createApi({
 
 // Export hooks for usage in function components, which are
 // auto-generated based on the defined endpoints
-export const { useFetchAllAdminsMutation, useGetUserDetailsQuery, useCreateAdminMutation } = usersApi;
+export const { useUpdateAdminAccountMutation, useFetchAllAdminsMutation, useGetAdminDetailsQuery, useCreateAdminMutation } = adminsApi;

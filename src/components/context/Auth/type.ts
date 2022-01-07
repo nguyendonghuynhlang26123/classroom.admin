@@ -1,4 +1,4 @@
-import { AuthData, IUser } from 'common/interfaces';
+import { AuthData, IAdmin } from 'common/interfaces';
 
 export type AuthProps = {
   signIn: (data: AuthData) => Promise<any>;
@@ -7,5 +7,5 @@ export type AuthProps = {
   reload: () => void;
   isAuthenticated: boolean;
   pending: boolean;
-  userData: IUser | undefined;
+  userData: IAdmin | undefined;
 };

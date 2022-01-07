@@ -13,6 +13,10 @@ const UserList = React.lazy(() => import('./Users/children/UserList'));
 const UserEdit = React.lazy(() => import('./Users/children/UserEdit'));
 
 const AdminManagement = React.lazy(() => import('./Admins'));
+const AdminList = React.lazy(() => import('./Admins/children/AdminList'));
+const AdminEdit = React.lazy(() => import('./Admins/children/AdminEdit'));
+const AdminCreate = React.lazy(() => import('./Admins/children/AdminCreate'));
+
 const ClassroomManagement = React.lazy(() => import('./Classroom'));
 const BlacklistManagement = React.lazy(() => import('./Blacklist'));
 
@@ -75,15 +79,28 @@ const appRoutes = (isAuthed: boolean, search: string, pathname: string): RouteCo
               element: <UserList />,
             },
             {
-              path: ':userId',
+              path: 'edit/:userId',
               element: <UserEdit />,
             },
           ],
         },
         {
           path: '/admin-account',
-          index: true,
           element: <AdminManagement />,
+          children: [
+            {
+              index: true,
+              element: <AdminList />,
+            },
+            {
+              path: 'create',
+              element: <AdminCreate />,
+            },
+            {
+              path: 'edit/:adminId',
+              element: <AdminEdit />,
+            },
+          ],
         },
         {
           path: '/classroom',

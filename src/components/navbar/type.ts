@@ -1,7 +1,7 @@
-import { IUser } from 'common/interfaces';
+import { IAdmin } from 'common/interfaces';
 
 export type NavbarProps = {
   loading: boolean;
   children: React.ReactElement | React.ReactElement[];
-  userData: IUser;
+  userData: IAdmin;
 };

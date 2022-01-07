@@ -1,4 +1,4 @@
-import { AuthData, IUser } from 'common/interfaces';
+import { AuthData, IAdmin, IUser } from 'common/interfaces';
 import React from 'react';
 import { repository } from 'services/repository';
 import JwtAuthService from './jwt.service';
@@ -17,7 +17,7 @@ const defaultValue: AuthProps = {
 const AuthContext = React.createContext<AuthProps>(defaultValue);
 
 export const AuthProvider = ({ children }: { children: any }) => {
-  const [infor, setInfor] = React.useState<IUser | undefined>(undefined);
+  const [infor, setInfor] = React.useState<IAdmin | undefined>(undefined);
   const [isAuthen, setIsAuthen] = React.useState<boolean>(false);
   const [pending, setIsPending] = React.useState<boolean>(true);
   const jwtService = new JwtAuthService();

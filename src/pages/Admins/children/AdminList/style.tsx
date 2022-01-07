@@ -5,4 +5,8 @@ export const userManagementSx = {
     width: 32,
     height: 32,
   },
+
+  link: {
+    color: 'text.primary',
+  },
 };

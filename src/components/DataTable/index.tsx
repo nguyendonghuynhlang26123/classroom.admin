@@ -73,12 +73,20 @@ export const DataTable = (props: DataTablePropType) => {
 
   const isSelected = (rowIndex: number) => selected.indexOf(rowIds[rowIndex]) !== -1;
 
+  const searchCallback = (key: string) => {
+    //Reset after call search fcn
+    setPage(0);
+    setOrder('desc');
+    setOrderBy('created_at');
+    searchData(key);
+  };
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page >= 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
     <Paper sx={tableSx.root} elevation={1}>
-      <TableToolbar numSelected={selected.length} handleSearch={searchData} />
+      <TableToolbar numSelected={selected.length} handleSearch={searchCallback} />
       <TableContainer>
         <Table sx={tableSx.table} aria-labelledby="tableTitle" size={'medium'}>
           <TableHeader

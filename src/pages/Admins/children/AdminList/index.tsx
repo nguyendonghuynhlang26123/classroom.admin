@@ -1,20 +1,19 @@
 import { Block, Delete, Edit, More, MoreVert } from '@mui/icons-material';
-import { Avatar, Chip, IconButton, Link, Stack, TableCell, Tooltip, Typography } from '@mui/material';
-import { IUser } from 'common/interfaces';
+import { Avatar, Chip, IconButton, Link, Stack, TableCell, Button } from '@mui/material';
+import { IAdmin } from 'common/interfaces';
 import Utils from 'common/utils';
-import { AppBreadcrumbs, DataTable, PopupMenu, useLoading } from 'components';
+import { AppBreadcrumbs, DataTable, PopupMenu } from 'components';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useFetchAllUsersMutation } from 'services';
+import { useFetchAllAdminsMutation } from 'services';
 import { userManagementSx } from './style';
-import GgIcon from 'assets/images/gg.svg';
 
 const headCells = [
   {
     id: 'name',
     numeric: false,
     disablePadding: true,
-    label: 'User',
+    label: 'Name',
   },
   {
     id: 'email',
@@ -23,22 +22,16 @@ const headCells = [
     label: 'Email',
   },
   {
-    id: 'student_id',
+    id: 'is_root',
     numeric: true,
     disablePadding: false,
-    label: 'Student id',
+    label: 'Type',
   },
   {
     id: 'created_at',
     numeric: true,
     disablePadding: false,
-    label: 'Join at',
-  },
-  {
-    id: 'google_id',
-    numeric: true,
-    disablePadding: false,
-    label: 'Others',
+    label: 'Created at',
   },
   {
     id: 'action',
@@ -48,24 +41,24 @@ const headCells = [
   },
 ];
 
-const UserList = () => {
+const AdminList = () => {
   const navigate = useNavigate();
 
-  const [fetchUsers, { data: getAllResponse, isLoading: isFetchingUsers }] = useFetchAllUsersMutation();
+  const [fetchAdmins, { data: getAllResponse, isLoading: isFetching }] = useFetchAllAdminsMutation();
   const totalPage = getAllResponse?.total_page ?? 0;
-  const userList = getAllResponse?.data ?? [];
-  const rows = userList.map((user: IUser) => createUserRecordRow(user));
-  const rowIds = userList.map((u: IUser) => u._id as string);
+  const adminList = getAllResponse?.data ?? [];
+  const rows = adminList.map((a: IAdmin) => createAdminRecordRow(a));
+  const rowIds = adminList.map((a: IAdmin) => a._id as string);
 
   React.useEffect(() => {
-    fetchUsers({
-      page: 0,
+    fetchAdmins({
+      page: 1,
       per_page: 5,
     });
   }, []);
 
   const fetchData = (page: number, perPage: number, order: 'desc' | 'asc', orderBy: string) => {
-    fetchUsers({
+    fetchAdmins({
       page: page + 1,
       per_page: perPage,
       sort_by: orderBy,
@@ -74,42 +67,37 @@ const UserList = () => {
   };
 
   const handleSearch = (key: string) => {
-    fetchUsers({
+    fetchAdmins({
       query: key,
       page: 1,
       per_page: 10,
     });
   };
 
-  function createUserRecordRow(user: IUser): JSX.Element {
+  function createAdminRecordRow(admin: IAdmin): JSX.Element {
     return (
       <>
         <TableCell scope="row" padding="none">
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar src={user.avatar} sizes="small" sx={userManagementSx.avatar} />
+            <Avatar src={admin.avatar} sizes="small" sx={{ width: 32, height: 32 }} />
             <Link
               underline="hover"
               href="#"
               onClick={(ev) => {
                 ev.preventDefault();
-                navigate('/user-account/edit/' + user._id);
+                navigate('/admin-account/edit/' + admin._id);
               }}
               sx={userManagementSx.link}
             >
-              {Utils.getFullName(user.first_name, user.last_name)}
+              {admin.name}
             </Link>
           </Stack>
         </TableCell>
-        <TableCell align="left">{user.email}</TableCell>
-        <TableCell align="right">{user.student_id}</TableCell>
-        <TableCell align="right">{Utils.displayDate(user.created_at as number)}</TableCell>
+        <TableCell align="left">{admin.email}</TableCell>
         <TableCell align="right">
-          {user.google_id && (
-            <Tooltip title={`This user is logged in using gg id=${user.google_id}`}>
-              <img src={GgIcon} alt="gg icon" sizes="32" />
-            </Tooltip>
-          )}
+          {admin.is_root ? <Chip label="Root" color="success" /> : <Chip label="Admin" color="warning" />}
         </TableCell>
+        <TableCell align="right">{Utils.displayDate(admin.created_at as number)}</TableCell>
         <TableCell align="right">
           <PopupMenu
             items={[
@@ -118,14 +106,7 @@ const UserList = () => {
                 icon: <Edit color="primary" />,
                 colorMode: 'primary',
                 sx: { width: 150, color: 'primary.main' },
-                callback: () => navigate('/user-account/edit/' + user._id),
-              },
-              {
-                label: 'Ban',
-                icon: <Block color="warning" />,
-                colorMode: 'warning',
-                sx: { width: 150, color: 'warning.main' },
-                callback: () => console.log('Bann'),
+                callback: () => navigate('/admin-account/edit/' + admin._id),
               },
               {
                 label: 'Delete',
@@ -147,18 +128,25 @@ const UserList = () => {
 
   return (
     <React.Fragment>
-      <AppBreadcrumbs
-        title="Users management"
-        label="Users"
-        list={[
-          {
-            href: '/',
-            label: 'Home',
-          },
-        ]}
-      />
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <AppBreadcrumbs
+          title="Admin accounts management"
+          label="Amin"
+          list={[
+            {
+              href: '/',
+              label: 'Home',
+            },
+          ]}
+        />
+        <Stack direction="row">
+          <Button variant="outlined" onClick={() => navigate('./create')}>
+            Add one
+          </Button>
+        </Stack>
+      </Stack>
       <DataTable
-        loading={isFetchingUsers}
+        loading={isFetching}
         headCells={headCells}
         rows={rows}
         fetchData={fetchData}
@@ -173,4 +161,4 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+export default AdminList;
