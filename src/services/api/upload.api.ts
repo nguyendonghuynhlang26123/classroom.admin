@@ -12,7 +12,7 @@ export const uploadApi = createApi({
   baseQuery: baseQuery,
   endpoints: (builder) => ({
     uploadImage: builder.mutation<IUploadResponse, FormData>({
-      query: (body: FormData) => _request.post(`upload-files/imagekit`, body),
+      query: (body: FormData) => _request.post(`admin/upload`, body),
     }),
   }),
 });

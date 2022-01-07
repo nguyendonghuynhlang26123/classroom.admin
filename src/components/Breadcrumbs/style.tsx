@@ -1,10 +1,12 @@
 import { SxType } from 'common/type';
 
 export const breadcrumbSx: SxType = {
-  py: 4,
+  pt: 6,
+  pb: 2,
   '& .breadcumbs-header': {
     fontSize: 20,
     fontWeight: 500,
+    mt: 0,
   },
 
   '& .MuiBreadcrumbs-root': {

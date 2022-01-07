@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { breadcrumbSx } from './style';
 import { BreadcrumbPropsType } from './type';
 
-export const AppBreadcrumbs = ({ title, list }: BreadcrumbPropsType) => {
+export const AppBreadcrumbs = ({ title, list, label }: BreadcrumbPropsType) => {
   const navigate = useNavigate();
   const handleOnClick = (ev: any, link: string) => {
     ev.preventDefault();
@@ -20,7 +20,7 @@ export const AppBreadcrumbs = ({ title, list }: BreadcrumbPropsType) => {
           </Link>
         ))}
 
-        <Typography color="text.primary">{title}</Typography>
+        <Typography color="text.primary">{label}</Typography>
       </Breadcrumbs>
     </Box>
   );

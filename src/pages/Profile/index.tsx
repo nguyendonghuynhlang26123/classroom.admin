@@ -8,7 +8,7 @@ import { useAuth, useLoading } from 'components';
 import { useFormik } from 'formik';
 import React from 'react';
 import { toast } from 'react-toastify';
-import { useUpdateProfileMutation, useUploadImageMutation } from 'services/api';
+import { useUpdateUserDataMutation, useUploadImageMutation } from 'services/api';
 import * as yup from 'yup';
 import { profileSx } from './style';
 
@@ -20,7 +20,7 @@ const validationSchema = yup.object({
 
 const UserProfile = () => {
   const { userData, reload } = useAuth();
-  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
+  const [updateProfile, { isLoading }] = useUpdateUserDataMutation();
   const [uploadAvatar, { isLoading: isUploading }] = useUploadImageMutation();
   const [avatar, setAvatar] = React.useState<string | undefined>(userData?.avatar);
   const [uploadFile, setUploadFile] = React.useState<any>(null);

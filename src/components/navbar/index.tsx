@@ -106,25 +106,7 @@ export const Navbar = ({ children, loading, userData }: NavbarProps) => {
           </List>
         </Drawer>
         <Box component="main" sx={navbarLayoutSx.main}>
-          <Container>
-            <Typography className="breadcumbs-header">User list</Typography>
-            <Breadcrumbs separator="●" aria-label="breadcrumb">
-              <Link underline="hover" color="inherit" href="#">
-                Home
-              </Link>
-              <Link underline="hover" color="inherit" href="#">
-                Catalog
-              </Link>
-              <Link underline="hover" color="inherit" href="#">
-                Accessories
-              </Link>
-              <Link underline="hover" color="inherit" href="#">
-                New Collection
-              </Link>
-              <Typography color="text.primary">Belts</Typography>
-            </Breadcrumbs>
-            {children}
-          </Container>
+          <Container>{children}</Container>
         </Box>
       </Box>
     </React.Fragment>

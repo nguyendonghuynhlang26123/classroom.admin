@@ -1,5 +1,5 @@
 import { Toolbar, Typography, Tooltip, IconButton, Box, InputBase, Divider, Chip } from '@mui/material';
-import { FilterList, Delete, Search } from '@mui/icons-material';
+import { FilterList, Delete, Search, Close } from '@mui/icons-material';
 import { alpha } from '@mui/material/styles';
 import React from 'react';
 import { TableToolbarProps } from './type';
@@ -12,7 +12,7 @@ export const TableToolbar = (props: TableToolbarProps) => {
   const debounceSearch = useDebounce(input, 500);
 
   React.useEffect(() => {
-    if (debounceSearch) handleSearch(debounceSearch);
+    handleSearch(debounceSearch);
   }, [debounceSearch]);
 
   return (
@@ -38,7 +38,13 @@ export const TableToolbar = (props: TableToolbarProps) => {
       ) : (
         <Box sx={toolbarSx.container}>
           <Box sx={toolbarSx.search}>
-            <Search />
+            {input ? (
+              <IconButton size="small" onClick={() => setInput('')}>
+                <Close />
+              </IconButton>
+            ) : (
+              <Search />
+            )}
             <InputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}

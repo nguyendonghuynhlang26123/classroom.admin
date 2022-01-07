@@ -1,10 +1,12 @@
 import { More } from '@mui/icons-material';
-import { Avatar, Stack, TableCell, Typography } from '@mui/material';
+import { Avatar, Link, Stack, TableCell, Typography } from '@mui/material';
 import { IUser } from 'common/interfaces';
 import Utils from 'common/utils';
 import { AppBreadcrumbs, DataTable } from 'components';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFetchAllUsersMutation } from 'services';
+import { userManagementSx } from './style';
 
 const headCells = [
   {
@@ -20,10 +22,16 @@ const headCells = [
     label: 'Email',
   },
   {
-    id: 'created_at',
+    id: 'google_id',
     numeric: false,
     disablePadding: false,
-    label: 'Created date',
+    label: 'Google id',
+  },
+  {
+    id: 'student_id',
+    numeric: true,
+    disablePadding: false,
+    label: 'Student id',
   },
   {
     id: 'action',
@@ -33,26 +41,9 @@ const headCells = [
   },
 ];
 
-function createUserRecordRow(user: IUser): JSX.Element {
-  return (
-    <>
-      <TableCell scope="row" padding="none">
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <Avatar src={user.avatar} sizes="small" />
-          <Typography>{Utils.getFullName(user.first_name, user.last_name)}</Typography>
-        </Stack>
-      </TableCell>
-      <TableCell align="left">{user.email}</TableCell>
-      <TableCell align="left">{user.google_id}</TableCell>
-      <TableCell align="right">{user.student_id}</TableCell>
-      <TableCell align="right">
-        <More />
-      </TableCell>
-    </>
-  );
-}
+const UserList = () => {
+  const navigate = useNavigate();
 
-const AdminAccountManagement = () => {
   const [page, setPage] = React.useState<number>(0);
   const [perPage, setPerPage] = React.useState<number>(5);
 
@@ -91,6 +82,35 @@ const AdminAccountManagement = () => {
     });
   };
 
+  function createUserRecordRow(user: IUser): JSX.Element {
+    return (
+      <>
+        <TableCell scope="row" padding="none">
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Avatar src={user.avatar} sizes="small" sx={userManagementSx.avatar} />
+            <Link
+              underline="hover"
+              href="#"
+              onClick={(ev) => {
+                ev.preventDefault();
+                navigate('/user-account/' + user._id);
+              }}
+              sx={userManagementSx.link}
+            >
+              {Utils.getFullName(user.first_name, user.last_name)}
+            </Link>
+          </Stack>
+        </TableCell>
+        <TableCell align="left">{user.email}</TableCell>
+        <TableCell align="left">{user.google_id}</TableCell>
+        <TableCell align="right">{user.student_id}</TableCell>
+        <TableCell align="right">
+          <More />
+        </TableCell>
+      </>
+    );
+  }
+
   return (
     <React.Fragment>
       <AppBreadcrumbs
@@ -118,4 +138,4 @@ const AdminAccountManagement = () => {
   );
 };
 
-export default AdminAccountManagement;
+export default UserList;

@@ -5,3 +5,4 @@ export * from './response';
 export * from './assignments';
 export * from './upload';
 export * from './classStudents';
+export * from './admin';

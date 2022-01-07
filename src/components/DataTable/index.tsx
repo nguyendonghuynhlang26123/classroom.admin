@@ -6,9 +6,9 @@ import { DataTablePropType } from './type';
 import { tableSx } from './style';
 
 export const DataTable = (props: DataTablePropType) => {
-  const { rows, rowIds, headCells, fetchData, curPage, perPage, total, searchData } = props;
+  const { rows, rowIds, headCells, fetchData, curPage, perPage, total, searchData, rowHeight } = props;
   const [order, setOrder] = React.useState<'asc' | 'desc'>('asc');
-  const [orderBy, setOrderBy] = React.useState<string>('calories');
+  const [orderBy, setOrderBy] = React.useState<string>('created_at');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(curPage);
   const [rowsPerPage, setRowsPerPage] = React.useState(perPage);
@@ -50,17 +50,20 @@ export const DataTable = (props: DataTablePropType) => {
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
+    fetchData(newPage, rowsPerPage, order, orderBy);
   };
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    const newPerPage = parseInt(event.target.value, 10);
+    setRowsPerPage(newPerPage);
     setPage(0);
+    fetchData(0, newPerPage, order, orderBy);
   };
 
   const isSelected = (rowIndex: number) => selected.indexOf(rowIds[rowIndex]) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const emptyRows = page >= 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
     <Paper sx={tableSx.root} elevation={1}>
@@ -77,42 +80,55 @@ export const DataTable = (props: DataTablePropType) => {
             rowCount={rows.length}
           />
           <TableBody>
-            {rows.map((row, index) => {
-              const isItemSelected = isSelected(index);
-              const labelId = `enhanced-table-checkbox-${index}`;
-
-              return (
-                <TableRow
-                  hover
-                  onClick={(event) => handleCheckboxChecked(event, index)}
-                  role="checkbox"
-                  aria-checked={isItemSelected}
-                  tabIndex={-1}
-                  key={index}
-                  selected={isItemSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      color="primary"
-                      checked={isItemSelected}
-                      inputProps={{
-                        'aria-labelledby': labelId,
-                      }}
-                    />
-                  </TableCell>
-                  {row}
-                </TableRow>
-              );
-            })}
-            {/* {emptyRows > 0 && (
+            {rows.length === 0 ? (
               <TableRow
                 style={{
-                  height: 53 * emptyRows,
+                  height: (rowHeight ?? 53) * emptyRows,
                 }}
               >
-                <TableCell colSpan={6} />
+                <TableCell colSpan={headCells.length} />
               </TableRow>
-            )} */}
+            ) : (
+              <>
+                {rows.map((row, index) => {
+                  const isItemSelected = isSelected(index);
+                  const labelId = `enhanced-table-checkbox-${index}`;
+
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={index}
+                      selected={isItemSelected}
+                      sx={{ height: rowHeight }}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                          checked={isItemSelected}
+                          onClick={(event) => handleCheckboxChecked(event, index)}
+                          inputProps={{
+                            'aria-labelledby': labelId,
+                          }}
+                        />
+                      </TableCell>
+                      {row}
+                    </TableRow>
+                  );
+                })}
+                {emptyRows > 0 && (
+                  <TableRow
+                    style={{
+                      height: (rowHeight ?? 53) * emptyRows,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </>
+            )}
           </TableBody>
         </Table>
       </TableContainer>

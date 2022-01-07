@@ -11,6 +11,7 @@ export type HeadCell = {
   id: string;
   label: string;
   numeric: boolean;
+  disableSort?: boolean;
 };
 
 export type TableHeaderProps = {
@@ -32,4 +33,5 @@ export type DataTablePropType = {
   curPage: number;
   perPage: number;
   total: number;
+  rowHeight?: number;
 };

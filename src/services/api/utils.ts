@@ -1,3 +1,4 @@
+import { QueryType } from './../../common/type/query.type';
 const get = (url: string) => ({
   url,
 });
@@ -24,4 +25,14 @@ export const _request = {
   post,
   put,
   delete: deleteReq,
+};
+export const queryToUrl = (url: string, query: QueryType) => {
+  const queryData = {
+    page: 1,
+    per_page: 10,
+    sort_type: 'desc',
+    sort_by: 'created_at',
+    ...query,
+  };
+  return url + '?' + new URLSearchParams(queryData as any).toString();
 };
