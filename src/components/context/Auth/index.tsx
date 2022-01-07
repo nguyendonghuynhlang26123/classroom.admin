@@ -87,19 +87,9 @@ export const AuthProvider = ({ children }: { children: any }) => {
     register: register,
     logOut: logOut,
     reload: checkJWT,
-    // isAuthenticated: isAuthen,
+    isAuthenticated: isAuthen,
     pending: pending,
-    // userData: infor,
-    isAuthenticated: true,
-    userData: {
-      avatar: 'https://ik.imagekit.io/mv9a74wawbo/image-1640536492182631148320_0jujI53l0.png',
-      created_at: 1640499883774,
-      email: 'long@mail.com',
-      first_name: 'Long',
-      last_name: 'Nguyen',
-      student_id: '',
-      updated_at: 1640536494639,
-    },
+    userData: infor,
   };
 
   return <AuthContext.Provider value={defaultProps}>{children}</AuthContext.Provider>;

@@ -62,7 +62,7 @@ class JwtAuthService {
   logIn(body: AuthData): Promise<AuthResponse> {
     return new Promise((resolve, reject) => {
       repository
-        .post(`/auth/login`, body)
+        .post(`admin/auth/login`, body)
         .then((response: any) => {
           if (response.data) {
             //eslint disable
@@ -79,7 +79,7 @@ class JwtAuthService {
   refresh(refreshToken: string): Promise<AuthResponse> {
     return new Promise((resolve, reject) => {
       repository
-        .post(`/auth/refresh`, { refresh_token: refreshToken })
+        .post(`admin/auth/refresh`, { refresh_token: refreshToken })
         .then((response: any) => {
           if (response.data) {
             //eslint disable
@@ -96,7 +96,7 @@ class JwtAuthService {
   register(body: AuthData): Promise<AuthResponse> {
     return new Promise((resolve, reject) => {
       repository
-        .post(`/auth/register`, body)
+        .post(`admin/auth/register`, body)
         .then((response: any) => {
           if (response) {
             // TODO: login after registered ?
@@ -115,7 +115,7 @@ class JwtAuthService {
     const refresh_token: any = localStorage.getItem(JWT_REFRESH_SESSION_KEY);
     return new Promise((resolve, reject) => {
       repository
-        .post(`/auth/logout`, { refresh_token })
+        .post(`admin/auth/logout`, { refresh_token })
         .then((response: any) => {
           this._setSession(null, null);
 
@@ -132,7 +132,7 @@ class JwtAuthService {
 
     return new Promise((resolve, reject) => {
       repository
-        .get(`/users/${decoded?._id}`)
+        .get(`admin/admin-accounts/${decoded?._id}`)
         .then((response: any) => {
           if (response.data) {
             resolve(response.data);
