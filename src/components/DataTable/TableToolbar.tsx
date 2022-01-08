@@ -7,7 +7,7 @@ import { toolbarSx } from './style';
 import { useDebounce } from 'components';
 
 export const TableToolbar = (props: TableToolbarProps) => {
-  const { numSelected, handleSearch } = props;
+  const { numSelected, handleSearch, handleDelete } = props;
   const [input, setInput] = React.useState<string>('');
   const debounceSearch = useDebounce(input, 500);
 
@@ -30,7 +30,7 @@ export const TableToolbar = (props: TableToolbarProps) => {
             {numSelected} selected
           </Typography>
           <Tooltip title="Delete">
-            <IconButton>
+            <IconButton onClick={handleDelete}>
               <Delete />
             </IconButton>
           </Tooltip>

@@ -2,13 +2,15 @@ import { Block, Delete, Edit, More, MoreVert } from '@mui/icons-material';
 import { Avatar, Chip, IconButton, Link, Stack, TableCell, Button } from '@mui/material';
 import { IClassroom, IClassroomUser, UserRole } from 'common/interfaces';
 import Utils from 'common/utils';
-import { AppBreadcrumbs, DataTable, PopupMenu } from 'components';
+import { AppBreadcrumbs, DataTable, PopupMenu, useDialog } from 'components';
+import { HeadCell } from 'components/DataTable/type';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useFetchAllClassesMutation } from 'services';
+import { toast } from 'react-toastify';
+import { useDeleteClassroomMutation, useFetchAllClassesMutation } from 'services';
 import { userManagementSx } from './style';
 
-const headCells = [
+const headCells: HeadCell[] = [
   {
     id: 'title',
     position: 'center',
@@ -61,8 +63,10 @@ const headCells = [
 
 const ClassroomList = () => {
   const navigate = useNavigate();
+  const [showDialog, Dialog] = useDialog();
 
   const [fetchClassrooms, { data: getAllResponse, isLoading: isFetching }] = useFetchAllClassesMutation();
+  const [deleteClassroom, { isLoading: isDeleting }] = useDeleteClassroomMutation();
   const totalPage = getAllResponse?.total_page ?? 0;
   const classroomList = getAllResponse?.data ?? [];
   const rows = classroomList.map((c: IClassroom) => createClassroomRecordRow(c));
@@ -89,6 +93,23 @@ const ClassroomList = () => {
       query: key,
       page: 1,
       per_page: 10,
+    });
+  };
+
+  const handleDelete = (ids: string[]) => {
+    showDialog(`Confirm deleting ${ids.length} items?`, () => {
+      Promise.all([...ids.map((id: string) => deleteClassroom(id).unwrap())])
+        .then(() => {
+          toast.success('Update succeed');
+          //Refetch
+          fetchClassrooms({
+            page: 1,
+            per_page: 5,
+          });
+        })
+        .catch((err) => {
+          toast.error('Update failed! ' + err.data);
+        });
     });
   };
 
@@ -142,7 +163,7 @@ const ClassroomList = () => {
                 icon: <Delete color="error" />,
                 colorMode: 'error',
                 sx: { width: 150, color: 'error.main' },
-                callback: () => console.log('DELETE'),
+                callback: () => handleDelete([classroom._id as string]),
               },
             ]}
           >
@@ -175,6 +196,7 @@ const ClassroomList = () => {
         </Stack>
       </Stack>
       <DataTable
+        deleteRows={handleDelete}
         loading={isFetching}
         headCells={headCells}
         rows={rows}
@@ -184,6 +206,8 @@ const ClassroomList = () => {
         total={totalPage}
         rowHeight={80}
       />
+
+      <Dialog />
     </React.Fragment>
   );
 };

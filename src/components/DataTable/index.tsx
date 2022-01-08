@@ -17,10 +17,10 @@ import { DataTablePropType } from './type';
 import { tableSx } from './style';
 
 export const DataTable = (props: DataTablePropType) => {
-  const { loading, rows, rowIds, headCells, fetchData, total, searchData, rowHeight, disableCheckbox } = props;
+  const { loading, rows, rowIds, headCells, fetchData, total, searchData, rowHeight, disableCheckbox, deleteRows } = props;
   const [order, setOrder] = React.useState<'asc' | 'desc'>('asc');
   const [orderBy, setOrderBy] = React.useState<string>('created_at');
-  const [selected, setSelected] = React.useState<readonly string[]>([]);
+  const [selected, setSelected] = React.useState<string[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -44,7 +44,7 @@ export const DataTable = (props: DataTablePropType) => {
   const handleCheckboxChecked = (event: React.MouseEvent<unknown>, rowIndex: number) => {
     const rowId = rowIds[rowIndex];
     const selectedIndex = selected.indexOf(rowId);
-    let newSelected: readonly string[] = [];
+    let newSelected: string[] = [];
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, rowId);
@@ -81,12 +81,17 @@ export const DataTable = (props: DataTablePropType) => {
     searchData(key);
   };
 
+  const handleDelete = () => {
+    deleteRows([...selected]);
+    setSelected([]);
+  };
+
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page >= 0 ? Math.max(0, rowsPerPage - rows.length) : 0;
 
   return (
     <Paper sx={tableSx.root} elevation={1}>
-      <TableToolbar numSelected={selected.length} handleSearch={searchCallback} />
+      <TableToolbar numSelected={selected.length} handleSearch={searchCallback} handleDelete={handleDelete} />
       <TableContainer>
         <Table sx={tableSx.table} aria-labelledby="tableTitle" size={'medium'}>
           <TableHeader

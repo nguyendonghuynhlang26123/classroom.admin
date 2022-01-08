@@ -25,9 +25,13 @@ export const usersApi = createApi({
       query: ({ id, body }) => _request.put(`admin/user-accounts/${id}`, body),
       invalidatesTags: [{ type: USERS_TAG, id: 'DATA' }],
     }),
+
+    deleteUser: builder.mutation<any, string>({
+      query: (id) => _request.delete(`admin/user-accounts/${id}`),
+    }),
   }),
 });
 
 // Export hooks for usage in function components, which are
 // auto-generated based on the defined endpoints
-export const { useFetchAllUsersMutation, useGetUserDetailsQuery, useUpdateUserDataMutation } = usersApi;
+export const { useFetchAllUsersMutation, useGetUserDetailsQuery, useUpdateUserDataMutation, useDeleteUserMutation } = usersApi;

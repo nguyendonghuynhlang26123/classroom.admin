@@ -2,18 +2,19 @@ import { Block, Delete, Edit, More, MoreVert } from '@mui/icons-material';
 import { Avatar, Button, Chip, IconButton, Link, Stack, TableCell, TextField, Tooltip, Typography } from '@mui/material';
 import { IUser } from 'common/interfaces';
 import Utils from 'common/utils';
-import { AppBreadcrumbs, DataTable, PopupMenu, SimpleModal, useLoading } from 'components';
+import { AppBreadcrumbs, DataTable, PopupMenu, SimpleModal, useDialog, useLoading } from 'components';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useBanAccountMutation, useFetchAllUsersMutation } from 'services';
+import { useBanAccountMutation, useDeleteUserMutation, useFetchAllUsersMutation } from 'services';
 import { userManagementSx } from './style';
 import GgIcon from 'assets/images/gg.svg';
 import { toast } from 'react-toastify';
+import { HeadCell } from 'components/DataTable/type';
 
-const headCells = [
+const headCells: HeadCell[] = [
   {
     id: 'name',
-    position: 'center',
+    position: 'left',
     disablePadding: true,
     label: 'User',
   },
@@ -51,8 +52,10 @@ const headCells = [
 
 const UserList = () => {
   const navigate = useNavigate();
+  const [showDialog, Dialog] = useDialog();
 
   const [fetchUsers, { data: getAllResponse, isLoading: isFetchingUsers }] = useFetchAllUsersMutation();
+  const [deletuser, { isLoading: isDeleting }] = useDeleteUserMutation();
   const [banUser, { isLoading: isBanning }] = useBanAccountMutation();
   const totalPage = getAllResponse?.total_page ?? 0;
   const userList = getAllResponse?.data ?? [];
@@ -106,6 +109,23 @@ const UserList = () => {
   const closeBanModal = () => {
     setBanReason('');
     setBanTarget(undefined);
+  };
+
+  const handleDelete = (ids: string[]) => {
+    showDialog(`Confirm deleting ${ids.length} items?`, () => {
+      Promise.all([...ids.map((id: string) => deletuser(id).unwrap())])
+        .then(() => {
+          toast.success('Update succeed');
+          //Refetch
+          fetchUsers({
+            page: 1,
+            per_page: 5,
+          });
+        })
+        .catch((err) => {
+          toast.error('Update failed! ' + err.data);
+        });
+    });
   };
 
   function createUserRecordRow(user: IUser): JSX.Element {
@@ -185,6 +205,7 @@ const UserList = () => {
         ]}
       />
       <DataTable
+        deleteRows={(ids: string[]) => console.log(ids)}
         loading={isFetchingUsers}
         headCells={headCells}
         rows={rows}

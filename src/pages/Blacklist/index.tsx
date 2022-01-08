@@ -6,8 +6,9 @@ import { AppBreadcrumbs, DataTable } from 'components';
 import React from 'react';
 import { useFetchAllBlacklistMutation, useUnblockAccountMutation } from 'services';
 import { toast } from 'react-toastify';
+import { HeadCell } from 'components/DataTable/type';
 
-const headCells = [
+const headCells: HeadCell[] = [
   {
     id: 'restored',
     position: 'center',
@@ -16,13 +17,13 @@ const headCells = [
   },
   {
     id: 'account',
-    position: 'center',
+    position: 'left',
     disablePadding: true,
     label: 'User',
   },
   {
     id: 'actor',
-    position: 'center',
+    position: 'left',
     disablePadding: false,
     label: 'Reporter',
   },
@@ -104,22 +105,22 @@ const BlacklistManagement = () => {
       : {};
     return (
       <>
-        <TableCell align="center" scope="row" padding="none">
+        <TableCell align="left" scope="row" padding="none">
           {blacklist.restored && <Chip label="Restored" color="success" variant="outlined" />}
         </TableCell>
         <TableCell scope="row" padding="none" sx={restoredSx} align="center">
           <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar src={blacklist.account.avatar} sizes="small" sx={{ width: 32, height: 32 }} />
-            <Link underline="hover" href="#">
+            <Link underline="hover" href="#" onClick={(ev) => ev.preventDefault()}>
               {Utils.getFullName(blacklist.account.first_name, blacklist.account.last_name)}
             </Link>
           </Stack>
         </TableCell>
-        <TableCell align="center" sx={restoredSx}>
+        <TableCell sx={restoredSx}>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar src={blacklist.account.avatar} sizes="small" sx={{ width: 32, height: 32 }} />
-            <Link underline="hover" href="#">
-              {Utils.getFullName(blacklist.account.first_name, blacklist.account.last_name)}
+            <Avatar src={blacklist.actor.avatar} sizes="small" sx={{ width: 32, height: 32 }} />
+            <Link underline="hover" href="#" onClick={(ev) => ev.preventDefault()}>
+              {blacklist.actor.name}
             </Link>
           </Stack>
         </TableCell>
@@ -155,6 +156,7 @@ const BlacklistManagement = () => {
         ]}
       />
       <DataTable
+        deleteRows={(ids: string[]) => console.log(ids)}
         loading={isFetchingUsers}
         headCells={headCells}
         rows={rows}

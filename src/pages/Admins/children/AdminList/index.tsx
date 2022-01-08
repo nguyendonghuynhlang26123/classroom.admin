@@ -2,17 +2,18 @@ import { Block, Delete, Edit, More, MoreVert } from '@mui/icons-material';
 import { Avatar, Chip, IconButton, Link, Stack, TableCell, Button } from '@mui/material';
 import { IAdmin } from 'common/interfaces';
 import Utils from 'common/utils';
-import { AppBreadcrumbs, DataTable, PopupMenu } from 'components';
+import { AppBreadcrumbs, DataTable, PopupMenu, useDialog } from 'components';
 import { HeadCell } from 'components/DataTable/type';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useFetchAllAdminsMutation } from 'services';
+import { useDeleteAdminMutation, useFetchAllAdminsMutation } from 'services';
 import { userManagementSx } from './style';
+import { toast } from 'react-toastify';
 
 const headCells: HeadCell[] = [
   {
     id: 'name',
-    position: 'center',
+    position: 'left',
     disablePadding: true,
     label: 'Name',
   },
@@ -44,8 +45,10 @@ const headCells: HeadCell[] = [
 
 const AdminList = () => {
   const navigate = useNavigate();
+  const [showDialog, Dialog] = useDialog();
 
   const [fetchAdmins, { data: getAllResponse, isLoading: isFetching }] = useFetchAllAdminsMutation();
+  const [deleteAdmin, { isLoading: isDeleting }] = useDeleteAdminMutation();
   const totalPage = getAllResponse?.total_page ?? 0;
   const adminList = getAllResponse?.data ?? [];
   const rows = adminList.map((a: IAdmin) => createAdminRecordRow(a));
@@ -58,7 +61,7 @@ const AdminList = () => {
     });
   }, []);
 
-  const fetchData = (page: number, perPage: number, order: 'desc' | 'asc', orderBy: string) => {
+  const fetchData = (page: number, perPage: number, order: 'desc' | 'asc' | undefined, orderBy: string | undefined) => {
     fetchAdmins({
       page: page + 1,
       per_page: perPage,
@@ -75,10 +78,27 @@ const AdminList = () => {
     });
   };
 
+  const handleDelete = (ids: string[]) => {
+    showDialog(`Confirm deleting ${ids.length} items?`, () => {
+      Promise.all([...ids.map((id: string) => deleteAdmin(id).unwrap())])
+        .then(() => {
+          toast.success('Update succeed');
+          //Refetch
+          fetchAdmins({
+            page: 1,
+            per_page: 5,
+          });
+        })
+        .catch((err) => {
+          toast.error('Update failed! ' + err.data);
+        });
+    });
+  };
+
   function createAdminRecordRow(admin: IAdmin): JSX.Element {
     return (
       <>
-        <TableCell scope="row" padding="none" align="center">
+        <TableCell scope="row" padding="none" align="left">
           <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar src={admin.avatar} sizes="small" sx={{ width: 32, height: 32 }} />
             <Link
@@ -118,7 +138,7 @@ const AdminList = () => {
                 icon: <Delete color="error" />,
                 colorMode: 'error',
                 sx: { width: 150, color: 'error.main' },
-                callback: () => console.log('DELETE'),
+                callback: () => handleDelete([admin._id as string]),
               },
             ]}
           >
@@ -151,6 +171,7 @@ const AdminList = () => {
         </Stack>
       </Stack>
       <DataTable
+        deleteRows={(ids: string[]) => handleDelete(ids)}
         loading={isFetching}
         headCells={headCells}
         rows={rows}
@@ -160,6 +181,8 @@ const AdminList = () => {
         total={totalPage}
         rowHeight={80}
       />
+
+      <Dialog />
     </React.Fragment>
   );
 };

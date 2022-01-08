@@ -29,7 +29,7 @@ export const TableHeader = (props: TableHeaderProps) => {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={'center'}
+            align={headCell.position}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >

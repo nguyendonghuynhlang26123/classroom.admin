@@ -29,9 +29,18 @@ export const adminsApi = createApi({
       query: (body) => _request.post(`admin/admin-accounts`, body),
       invalidatesTags: [{ type: ADMINS_TAG, id: 'DATA' }],
     }),
+    deleteAdmin: builder.mutation<any, string>({
+      query: (id) => _request.delete(`admin/admin-accounts/${id}`),
+    }),
   }),
 });
 
 // Export hooks for usage in function components, which are
 // auto-generated based on the defined endpoints
-export const { useUpdateAdminAccountMutation, useFetchAllAdminsMutation, useGetAdminDetailsQuery, useCreateAdminMutation } = adminsApi;
+export const {
+  useUpdateAdminAccountMutation,
+  useFetchAllAdminsMutation,
+  useGetAdminDetailsQuery,
+  useCreateAdminMutation,
+  useDeleteAdminMutation,
+} = adminsApi;

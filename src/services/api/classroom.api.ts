@@ -27,9 +27,13 @@ export const classroomApi = createApi({
       query: ({ id, body }) => _request.put('admin/classrooms/' + id, body),
       invalidatesTags: [{ type: CLASSROOM_TAG, id: 'DETAILS' }],
     }),
+    deleteClassroom: builder.mutation<any, string>({
+      query: (id) => _request.delete(`admin/classrooms/${id}`),
+    }),
   }),
 });
 
 // Export hooks for usage in function components, which are
 // auto-generated based on the defined endpoints
-export const { useFetchAllClassesMutation, useGetClassDetailsQuery, useUpdateClassDetailsMutation } = classroomApi;
+export const { useFetchAllClassesMutation, useGetClassDetailsQuery, useUpdateClassDetailsMutation, useDeleteClassroomMutation } =
+  classroomApi;

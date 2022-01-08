@@ -1,6 +1,7 @@
 export type TableToolbarProps = {
   numSelected: number;
   handleSearch: (key: string) => any;
+  handleDelete: () => any;
   // filters: [];
 };
 
@@ -10,7 +11,7 @@ export type HeadCell = {
   disablePadding: boolean;
   id: string;
   label: string;
-  position: string;
+  position: 'left' | 'center' | 'right';
   disableSort?: boolean;
 };
 
@@ -33,6 +34,7 @@ export type DataTablePropType = {
   headCells: HeadCell[];
   fetchData: (page: number, perPage: number, order: 'asc' | 'desc', orderBy: string) => any;
   searchData: (key: string) => any;
+  deleteRows: (ids: string[]) => any;
   total: number;
   rowHeight?: number;
 };
