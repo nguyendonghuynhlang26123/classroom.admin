@@ -18,6 +18,9 @@ const AdminEdit = React.lazy(() => import('./Admins/children/AdminEdit'));
 const AdminCreate = React.lazy(() => import('./Admins/children/AdminCreate'));
 
 const ClassroomManagement = React.lazy(() => import('./Classroom'));
+const ClassroomList = React.lazy(() => import('./Classroom/children/ClassroomList'));
+const ClassroomEdit = React.lazy(() => import('./Classroom/children/ClassroomEdit'));
+
 const BlacklistManagement = React.lazy(() => import('./Blacklist'));
 
 //Auth
@@ -104,8 +107,17 @@ const appRoutes = (isAuthed: boolean, search: string, pathname: string): RouteCo
         },
         {
           path: '/classroom',
-          index: true,
           element: <ClassroomManagement />,
+          children: [
+            {
+              index: true,
+              element: <ClassroomList />,
+            },
+            {
+              path: 'edit/:adminId',
+              element: <ClassroomEdit />,
+            },
+          ],
         },
         {
           path: '/blacklist',

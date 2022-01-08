@@ -17,12 +17,12 @@ import { DataTablePropType } from './type';
 import { tableSx } from './style';
 
 export const DataTable = (props: DataTablePropType) => {
-  const { loading, rows, rowIds, headCells, fetchData, curPage, perPage, total, searchData, rowHeight } = props;
+  const { loading, rows, rowIds, headCells, fetchData, total, searchData, rowHeight } = props;
   const [order, setOrder] = React.useState<'asc' | 'desc'>('asc');
   const [orderBy, setOrderBy] = React.useState<string>('created_at');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
-  const [page, setPage] = React.useState(curPage);
-  const [rowsPerPage, setRowsPerPage] = React.useState(perPage);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event: React.MouseEvent<unknown>, property: string) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -82,7 +82,7 @@ export const DataTable = (props: DataTablePropType) => {
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page >= 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const emptyRows = page >= 0 ? Math.max(0, rowsPerPage - rows.length) : 0;
 
   return (
     <Paper sx={tableSx.root} elevation={1}>
@@ -161,7 +161,7 @@ export const DataTable = (props: DataTablePropType) => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={total}
+        count={total * rowsPerPage}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

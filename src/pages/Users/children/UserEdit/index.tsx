@@ -147,7 +147,6 @@ const UserEdit = () => {
                 name="first_name"
                 label="First name (required)"
                 fullWidth
-                disabled={userData?.google_id !== null}
                 value={formik.values.first_name}
                 onChange={formik.handleChange}
                 error={formik.touched.first_name && Boolean(formik.errors.first_name)}
@@ -158,7 +157,6 @@ const UserEdit = () => {
                 name="last_name"
                 label="Lastname (required)"
                 fullWidth
-                disabled={userData?.google_id !== null}
                 onChange={formik.handleChange}
                 value={formik.values.last_name}
                 error={formik.touched.last_name && Boolean(formik.errors.last_name)}

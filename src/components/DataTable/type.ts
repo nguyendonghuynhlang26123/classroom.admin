@@ -31,8 +31,6 @@ export type DataTablePropType = {
   headCells: HeadCell[];
   fetchData: (page: number, perPage: number, order: 'asc' | 'desc', orderBy: string) => any;
   searchData: (key: string) => any;
-  curPage: number;
-  perPage: number;
   total: number;
   rowHeight?: number;
 };

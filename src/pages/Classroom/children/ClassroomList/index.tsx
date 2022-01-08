@@ -1,31 +1,49 @@
 import { Block, Delete, Edit, More, MoreVert } from '@mui/icons-material';
 import { Avatar, Chip, IconButton, Link, Stack, TableCell, Button } from '@mui/material';
-import { IAdmin } from 'common/interfaces';
+import { IClassroom, IClassroomUser, UserRole } from 'common/interfaces';
 import Utils from 'common/utils';
 import { AppBreadcrumbs, DataTable, PopupMenu } from 'components';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useFetchAllAdminsMutation } from 'services';
+import { useFetchAllClassesMutation } from 'services';
 import { userManagementSx } from './style';
 
 const headCells = [
   {
-    id: 'name',
+    id: 'title',
     numeric: false,
     disablePadding: true,
-    label: 'Name',
+    label: 'Title',
   },
   {
-    id: 'email',
-    numeric: false,
-    disablePadding: false,
-    label: 'Email',
-  },
-  {
-    id: 'is_root',
+    id: 'subject',
     numeric: true,
     disablePadding: false,
-    label: 'Type',
+    label: 'Subject',
+  },
+  {
+    id: 'section',
+    numeric: true,
+    disablePadding: false,
+    label: 'Section',
+  },
+  {
+    id: 'room',
+    numeric: true,
+    disablePadding: false,
+    label: 'Room',
+  },
+  {
+    id: 'code',
+    numeric: true,
+    disablePadding: false,
+    label: 'Code',
+  },
+  {
+    id: 'users',
+    numeric: true,
+    disablePadding: false,
+    label: 'Participants',
   },
   {
     id: 'created_at',
@@ -41,24 +59,24 @@ const headCells = [
   },
 ];
 
-const AdminList = () => {
+const ClassroomList = () => {
   const navigate = useNavigate();
 
-  const [fetchAdmins, { data: getAllResponse, isLoading: isFetching }] = useFetchAllAdminsMutation();
+  const [fetchClassrooms, { data: getAllResponse, isLoading: isFetching }] = useFetchAllClassesMutation();
   const totalPage = getAllResponse?.total_page ?? 0;
-  const adminList = getAllResponse?.data ?? [];
-  const rows = adminList.map((a: IAdmin) => createAdminRecordRow(a));
-  const rowIds = adminList.map((a: IAdmin) => a._id as string);
+  const classroomList = getAllResponse?.data ?? [];
+  const rows = classroomList.map((c: IClassroom) => createClassroomRecordRow(c));
+  const rowIds = classroomList.map((c: IClassroom) => c._id as string);
 
   React.useEffect(() => {
-    fetchAdmins({
+    fetchClassrooms({
       page: 1,
       per_page: 5,
     });
   }, []);
 
   const fetchData = (page: number, perPage: number, order: 'desc' | 'asc', orderBy: string) => {
-    fetchAdmins({
+    fetchClassrooms({
       page: page + 1,
       per_page: perPage,
       sort_by: orderBy,
@@ -67,37 +85,48 @@ const AdminList = () => {
   };
 
   const handleSearch = (key: string) => {
-    fetchAdmins({
+    fetchClassrooms({
       query: key,
       page: 1,
       per_page: 10,
     });
   };
 
-  function createAdminRecordRow(admin: IAdmin): JSX.Element {
+  function createClassroomRecordRow(classroom: IClassroom): JSX.Element {
+    const teacherCount = classroom.users.filter((u: IClassroomUser) => u.role !== UserRole.STUDENT).length;
+    const studentCount = classroom.users.filter((u: IClassroomUser) => u.role === UserRole.STUDENT).length;
+
     return (
       <>
         <TableCell scope="row" padding="none">
           <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar src={admin.avatar} sizes="small" sx={{ width: 32, height: 32 }} />
+            {/* <Avatar src={admin.avatar} sizes="small" sx={{ width: 32, height: 32 }} /> */}
             <Link
               underline="hover"
               href="#"
               onClick={(ev) => {
                 ev.preventDefault();
-                navigate('/admin-account/edit/' + admin._id);
+                navigate('/classroom/edit/' + classroom._id);
               }}
               sx={userManagementSx.link}
             >
-              {admin.name}
+              {classroom.title}
             </Link>
           </Stack>
         </TableCell>
-        <TableCell align="left">{admin.email}</TableCell>
+        <TableCell align="right">{classroom.subject}</TableCell>
+        <TableCell align="right">{classroom.section}</TableCell>
+        <TableCell align="right">{classroom.room}</TableCell>
         <TableCell align="right">
-          {admin.is_root ? <Chip label="Root" color="success" /> : <Chip label="Admin" color="warning" />}
+          <Chip label={classroom.code} onClick={() => {}} size="small" />
         </TableCell>
-        <TableCell align="right">{Utils.displayDate(admin.created_at as number)}</TableCell>
+        <TableCell align="right">
+          {/* {classroom.users.length} */}
+          <Chip label={`${teacherCount} teachers`} color="success" size="small" variant="outlined" />{' '}
+          <Chip label={`${studentCount} students`} color="primary" size="small" variant="outlined" />
+          {/* {classroom.is_root ? <Chip label="Root" color="success" /> : <Chip label="Admin" color="warning" />} */}
+        </TableCell>
+        <TableCell align="right">{Utils.displayDate(classroom.created_at as number)}</TableCell>
         <TableCell align="right">
           <PopupMenu
             items={[
@@ -106,7 +135,7 @@ const AdminList = () => {
                 icon: <Edit color="primary" />,
                 colorMode: 'primary',
                 sx: { width: 150, color: 'primary.main' },
-                callback: () => navigate('/admin-account/edit/' + admin._id),
+                callback: () => navigate('/classroom/edit/' + classroom._id),
               },
               {
                 label: 'Delete',
@@ -130,8 +159,8 @@ const AdminList = () => {
     <React.Fragment>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <AppBreadcrumbs
-          title="Admin accounts management"
-          label="Amin"
+          title="Classrooms management"
+          label="Classroom"
           list={[
             {
               href: '/',
@@ -159,4 +188,4 @@ const AdminList = () => {
   );
 };
 
-export default AdminList;
+export default ClassroomList;

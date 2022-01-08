@@ -1,5 +1,5 @@
 import { loadingSlice, cleanUpSlice } from './slices';
-import { classroomApi, classroomDetailsApi, usersApi, uploadApi, adminsApi } from 'services/api';
+import { classroomApi, usersApi, uploadApi, adminsApi } from 'services/api';
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/dist/query';
 
@@ -7,7 +7,6 @@ const combinedReducer = combineReducers({
   [loadingSlice.name]: loadingSlice.reducer,
   [cleanUpSlice.name]: cleanUpSlice.reducer,
   [classroomApi.reducerPath]: classroomApi.reducer,
-  [classroomDetailsApi.reducerPath]: classroomDetailsApi.reducer,
   [usersApi.reducerPath]: usersApi.reducer,
   [uploadApi.reducerPath]: uploadApi.reducer,
   [adminsApi.reducerPath]: adminsApi.reducer,
@@ -23,13 +22,7 @@ const rootReducer = (state: any, action: any): any => {
 export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(
-      classroomApi.middleware,
-      classroomDetailsApi.middleware,
-      usersApi.middleware,
-      uploadApi.middleware,
-      adminsApi.middleware,
-    ),
+    getDefaultMiddleware().concat(classroomApi.middleware, usersApi.middleware, uploadApi.middleware, adminsApi.middleware),
 });
 
 // enable listener behavior for the store

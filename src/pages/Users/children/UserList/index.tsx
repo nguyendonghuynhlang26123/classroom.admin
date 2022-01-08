@@ -105,7 +105,7 @@ const UserList = () => {
         <TableCell align="right">{Utils.displayDate(user.created_at as number)}</TableCell>
         <TableCell align="right">
           {user.google_id && (
-            <Tooltip title={`This user is logged in using gg id=${user.google_id}`}>
+            <Tooltip title={`This user is logged in using google (id=${user.google_id})`}>
               <img src={GgIcon} alt="gg icon" sizes="32" />
             </Tooltip>
           )}
@@ -164,8 +164,6 @@ const UserList = () => {
         fetchData={fetchData}
         searchData={handleSearch}
         rowIds={rowIds}
-        curPage={0}
-        perPage={5}
         total={totalPage}
         rowHeight={60}
       />
