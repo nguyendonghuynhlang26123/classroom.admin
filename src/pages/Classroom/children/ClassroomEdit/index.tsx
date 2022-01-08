@@ -1,47 +1,57 @@
 //Profile
 import { PhotoCamera } from '@mui/icons-material';
 import { Avatar, Box, Button, Container, Grid, Stack, TextField, Typography } from '@mui/material';
-import { NAME_REGEX, STUDENT_ID_REGEX } from 'common/constants/regex';
-import { IUserBody } from 'common/interfaces';
+import { IClassroomBody } from 'common/interfaces';
 import Utils from 'common/utils';
 import { useAuth, useLoading, AppBreadcrumbs } from 'components';
 import { useFormik } from 'formik';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useUploadImageMutation, useGetAdminDetailsQuery, useUpdateAdminAccountMutation } from 'services/api';
+import { useUploadImageMutation, useGetClassDetailsQuery, useUpdateClassDetailsMutation } from 'services/api';
 import * as yup from 'yup';
-import { userEditSx } from './style';
+import { classroomEditSx } from './style';
 
 const validationSchema = yup.object({
-  name: yup.string().required('Name is required'),
+  title: yup
+    .string()
+    .min(1, 'Classroom Title should be of 1-100 characters length')
+    .max(100, 'Classroom Title should be of 1-100 characters length')
+    .required('Classroom Title is required'),
+  section: yup.string().min(1, 'Section should be of 1-50 characters length').max(50, 'Section should be of 1-50 characters length'),
+  subject: yup.string().min(1, 'Subject should be of 1-50 characters length').max(50, 'Subject should be of 1-50 characters length'),
+  room: yup.string().min(1, 'Room should be of 1-50 characters length').max(50, 'Room should be of 1-50 characters length'),
 });
+const defaultProps: IClassroomBody = {
+  title: '',
+  room: '',
+  section: '',
+  subject: '',
+};
 
-const AdminEdit = () => {
-  const { adminId } = useParams();
-  const { data: adminData, isLoading: isFetchingData } = useGetAdminDetailsQuery(adminId as string);
-  const [updateAdmin, { isLoading }] = useUpdateAdminAccountMutation();
+const ClassroomEdit = () => {
+  const { classroomId } = useParams();
+  const { data: classroomData, isLoading: isFetchingData } = useGetClassDetailsQuery(classroomId as string);
+  console.log('log ~ file: index.tsx ~ line 35 ~ ClassroomEdit ~ classroomData', classroomData);
+  const [updateClassroom, { isLoading }] = useUpdateClassDetailsMutation();
   const [uploadAvatar, { isLoading: isUploading }] = useUploadImageMutation();
-  const [avatar, setAvatar] = React.useState<string | undefined>(adminData?.avatar);
+  const [avatar, setAvatar] = React.useState<string | undefined>(classroomData?.image);
   const [uploadFile, setUploadFile] = React.useState<any>(null);
   const [, setLoading] = useLoading();
 
-  const formik = useFormik({
-    initialValues: {
-      name: adminData?.name || '',
-    },
+  const formik = useFormik<IClassroomBody>({
+    initialValues: defaultProps,
     validateOnBlur: true,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      if (adminData) {
-        handleUpdateData(adminData._id as string, values.name, uploadFile)
-          .then(() => {
-            toast.success('Update succeed');
-          })
-          .catch((err) => {
-            toast.error('Update failed! ' + err.data);
-          });
-      }
+      updateClassroom({ id: classroomId as string, body: values })
+        .unwrap()
+        .then(() => {
+          toast.success('Update class data completed');
+        })
+        .catch((err) => {
+          toast.error('Update class data failed! ' + err.data);
+        });
     },
   });
 
@@ -50,24 +60,27 @@ const AdminEdit = () => {
   }, [isLoading, isUploading, isFetchingData]);
 
   React.useEffect(() => {
-    if (adminData) {
+    if (classroomData) {
       formik.setValues({
-        name: adminData?.name || '',
+        title: classroomData.title ?? '',
+        room: classroomData.room ?? '',
+        section: classroomData.section ?? '',
+        subject: classroomData.subject ?? '',
       });
-      setAvatar(adminData.avatar);
+      setAvatar(classroomData?.image);
     }
-  }, [adminData]);
+  }, [classroomData]);
 
-  const handleUpdateData = async (id: string, name: string, file: any) => {
-    let form_data = new FormData();
+  // const handleUpdateData = async (id: string, name: string, file: any) => {
+  //   let form_data = new FormData();
 
-    if (file) {
-      form_data.append('image', file);
-      const uploaded = await uploadAvatar(form_data).unwrap();
-      return await updateAdmin({ id: id, body: { name: name, avatar: uploaded.url } });
-    }
-    return await updateAdmin({ id: id, body: { name: name, avatar: undefined } });
-  };
+  //   if (file) {
+  //     form_data.append('image', file);
+  //     const uploaded = await uploadAvatar(form_data).unwrap();
+  //     return await updateClassroom({ id: id, body: { name: name, avatar: uploaded.url } });
+  //   }
+  //   return await updateClassroom({ id: id, body: { name: name, avatar: undefined } });
+  // };
 
   const handleSelectFile = (ev: any) => {
     const file = ev?.target?.files[0];
@@ -85,7 +98,7 @@ const AdminEdit = () => {
   };
 
   return (
-    <Box sx={userEditSx.root}>
+    <Box sx={classroomEditSx.root}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <AppBreadcrumbs
           title="Edit User"
@@ -107,14 +120,10 @@ const AdminEdit = () => {
           </Button>
         </Stack>
       </Stack>
-      <Box sx={userEditSx.form} component="form" noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
-        <Stack spacing={3} direction="row" alignItems="center">
-          <Box sx={userEditSx.avatarContainer}>
-            {avatar ? (
-              <Avatar variant="rounded" sx={{ width: '100%', height: 'auto' }} src={avatar} />
-            ) : (
-              <Avatar variant="rounded" sx={{ width: '100%', height: 'auto' }}></Avatar>
-            )}
+      <Box sx={classroomEditSx.form} component="form" noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
+        <Stack spacing={3} direction="column" alignItems="center">
+          <Box sx={classroomEditSx.imageContainer}>
+            <Avatar variant="rounded" sx={{ height: '100%', width: '100%' }} src={avatar} />
 
             <label htmlFor="icon-button-file" className="overlay">
               <input accept="image/*" id="icon-button-file" type="file" onChange={handleSelectFile} />
@@ -123,16 +132,49 @@ const AdminEdit = () => {
           </Box>
           <Box>
             <TextField
-              id="name"
-              name="name"
-              label="Name (required)"
+              id="title"
+              name="title"
+              label="Class name (required)"
+              variant="filled"
               fullWidth
-              value={formik.values.name}
+              value={formik.values.title}
               onChange={formik.handleChange}
-              error={formik.touched.name && Boolean(formik.errors.name)}
-              helperText={formik.touched.name && formik.errors.name}
+              error={formik.touched.title && Boolean(formik.errors.title)}
+              helperText={formik.touched.title && formik.errors.title}
             />
-            <TextField id="email" name="email" label="Email" fullWidth disabled value={adminData?.email} />
+            <TextField
+              id="section"
+              name="section"
+              label="Section"
+              variant="filled"
+              fullWidth
+              onChange={formik.handleChange}
+              value={formik.values.section}
+              error={formik.touched.section && Boolean(formik.errors.section)}
+              helperText={formik.touched.section && formik.errors.section}
+            />
+            <TextField
+              id="subject"
+              name="subject"
+              label="Subject"
+              variant="filled"
+              fullWidth
+              onChange={formik.handleChange}
+              value={formik.values.subject}
+              error={formik.touched.subject && Boolean(formik.errors.subject)}
+              helperText={formik.touched.subject && formik.errors.subject}
+            />
+            <TextField
+              id="room"
+              name="room"
+              label="Room"
+              variant="filled"
+              fullWidth
+              onChange={formik.handleChange}
+              value={formik.values.room}
+              error={formik.touched.room && Boolean(formik.errors.room)}
+              helperText={formik.touched.room && formik.errors.room}
+            />
           </Box>
         </Stack>
       </Box>
@@ -140,4 +182,4 @@ const AdminEdit = () => {
   );
 };
 
-export default AdminEdit;
+export default ClassroomEdit;

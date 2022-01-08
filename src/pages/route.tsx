@@ -114,7 +114,7 @@ const appRoutes = (isAuthed: boolean, search: string, pathname: string): RouteCo
               element: <ClassroomList />,
             },
             {
-              path: 'edit/:adminId',
+              path: 'edit/:classroomId',
               element: <ClassroomEdit />,
             },
           ],

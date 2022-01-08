@@ -1,6 +1,6 @@
 import { MultipleSxTypes } from 'common/type';
 
-export const userEditSx: MultipleSxTypes = {
+export const classroomEditSx: MultipleSxTypes = {
   root: {
     maxWidth: 700,
     '& .MuiButton-root': {
@@ -41,9 +41,10 @@ export const userEditSx: MultipleSxTypes = {
     fontStyle: 'italic',
   },
 
-  avatarContainer: {
+  imageContainer: {
     position: 'relative',
-    width: 160,
+    width: '100%',
+    height: 150,
 
     '& label': {
       position: 'absolute',

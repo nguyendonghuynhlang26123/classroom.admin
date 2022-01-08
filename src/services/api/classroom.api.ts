@@ -1,6 +1,6 @@
 import { QueryType } from 'common/type';
 import { _request, queryToUrl } from './utils';
-import { IGenericGetAllResponse } from 'common/interfaces';
+import { IGenericGetAllResponse, IClassroomBody } from 'common/interfaces';
 // Need to use the React-specific entry point to allow generating React hooks
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQuery } from '../repository';
@@ -19,12 +19,17 @@ export const classroomApi = createApi({
       query: (query: QueryType) => _request.get(queryToUrl(`admin/classrooms`, query)),
     }),
     getClassDetails: builder.query<IClassroom, string>({
-      query: (id: string) => _request.get(`classes/${id}`),
+      query: (id: string) => _request.get(`admin/classrooms/${id}`),
       providesTags: [{ type: CLASSROOM_TAG, id: 'DETAILS' }],
+    }),
+
+    updateClassDetails: builder.mutation<IClassroom, { id: string; body: IClassroomBody }>({
+      query: ({ id, body }) => _request.put('admin/classrooms/' + id, body),
+      invalidatesTags: [{ type: CLASSROOM_TAG, id: 'DETAILS' }],
     }),
   }),
 });
 
 // Export hooks for usage in function components, which are
 // auto-generated based on the defined endpoints
-export const { useFetchAllClassesMutation, useGetClassDetailsQuery } = classroomApi;
+export const { useFetchAllClassesMutation, useGetClassDetailsQuery, useUpdateClassDetailsMutation } = classroomApi;
