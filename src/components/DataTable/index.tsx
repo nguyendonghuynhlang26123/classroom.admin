@@ -17,7 +17,7 @@ import { DataTablePropType } from './type';
 import { tableSx } from './style';
 
 export const DataTable = (props: DataTablePropType) => {
-  const { loading, rows, rowIds, headCells, fetchData, total, searchData, rowHeight } = props;
+  const { loading, rows, rowIds, headCells, fetchData, total, searchData, rowHeight, disableCheckbox } = props;
   const [order, setOrder] = React.useState<'asc' | 'desc'>('asc');
   const [orderBy, setOrderBy] = React.useState<string>('created_at');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -90,6 +90,7 @@ export const DataTable = (props: DataTablePropType) => {
       <TableContainer>
         <Table sx={tableSx.table} aria-labelledby="tableTitle" size={'medium'}>
           <TableHeader
+            disableCheckbox={disableCheckbox}
             headCells={headCells}
             numSelected={selected.length}
             order={order}
@@ -131,14 +132,16 @@ export const DataTable = (props: DataTablePropType) => {
                       sx={{ height: rowHeight }}
                     >
                       <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          onClick={(event) => handleCheckboxChecked(event, index)}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
+                        {!disableCheckbox && (
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            onClick={(event) => handleCheckboxChecked(event, index)}
+                            inputProps={{
+                              'aria-labelledby': labelId,
+                            }}
+                          />
+                        )}
                       </TableCell>
                       {row}
                     </TableRow>

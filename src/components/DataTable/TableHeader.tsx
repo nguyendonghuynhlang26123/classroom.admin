@@ -5,7 +5,7 @@ import { headerSx } from './style';
 import React from 'react';
 
 export const TableHeader = (props: TableHeaderProps) => {
-  const { headCells, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+  const { headCells, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, disableCheckbox } = props;
   const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
@@ -14,20 +14,22 @@ export const TableHeader = (props: TableHeaderProps) => {
     <TableHead sx={headerSx.root}>
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
+          {!disableCheckbox && (
+            <Checkbox
+              color="primary"
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{
+                'aria-label': 'select all desserts',
+              }}
+            />
+          )}
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
+            align={'center'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >

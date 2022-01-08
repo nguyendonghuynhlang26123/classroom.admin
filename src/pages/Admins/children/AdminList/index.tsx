@@ -3,39 +3,40 @@ import { Avatar, Chip, IconButton, Link, Stack, TableCell, Button } from '@mui/m
 import { IAdmin } from 'common/interfaces';
 import Utils from 'common/utils';
 import { AppBreadcrumbs, DataTable, PopupMenu } from 'components';
+import { HeadCell } from 'components/DataTable/type';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFetchAllAdminsMutation } from 'services';
 import { userManagementSx } from './style';
 
-const headCells = [
+const headCells: HeadCell[] = [
   {
     id: 'name',
-    numeric: false,
+    position: 'center',
     disablePadding: true,
     label: 'Name',
   },
   {
     id: 'email',
-    numeric: false,
+    position: 'center',
     disablePadding: false,
     label: 'Email',
   },
   {
     id: 'is_root',
-    numeric: true,
+    position: 'center',
     disablePadding: false,
     label: 'Type',
   },
   {
     id: 'created_at',
-    numeric: true,
+    position: 'center',
     disablePadding: false,
     label: 'Created at',
   },
   {
     id: 'action',
-    numeric: true,
+    position: 'center',
     disablePadding: false,
     label: 'Action',
   },
@@ -77,7 +78,7 @@ const AdminList = () => {
   function createAdminRecordRow(admin: IAdmin): JSX.Element {
     return (
       <>
-        <TableCell scope="row" padding="none">
+        <TableCell scope="row" padding="none" align="center">
           <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar src={admin.avatar} sizes="small" sx={{ width: 32, height: 32 }} />
             <Link
@@ -93,12 +94,16 @@ const AdminList = () => {
             </Link>
           </Stack>
         </TableCell>
-        <TableCell align="left">{admin.email}</TableCell>
-        <TableCell align="right">
-          {admin.is_root ? <Chip label="Root" color="success" /> : <Chip label="Admin" color="warning" />}
+        <TableCell align="center">{admin.email}</TableCell>
+        <TableCell align="center">
+          {admin.is_root ? (
+            <Chip label="Root" color="success" variant="outlined" />
+          ) : (
+            <Chip label="Admin" color="warning" variant="outlined" />
+          )}
         </TableCell>
-        <TableCell align="right">{Utils.displayDate(admin.created_at as number)}</TableCell>
-        <TableCell align="right">
+        <TableCell align="center">{Utils.displayDate(admin.created_at as number)}</TableCell>
+        <TableCell align="center">
           <PopupMenu
             items={[
               {

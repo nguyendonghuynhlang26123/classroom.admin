@@ -10,11 +10,12 @@ export type HeadCell = {
   disablePadding: boolean;
   id: string;
   label: string;
-  numeric: boolean;
+  position: string;
   disableSort?: boolean;
 };
 
 export type TableHeaderProps = {
+  disableCheckbox?: boolean;
   headCells: HeadCell[];
   numSelected: number;
   onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
@@ -26,6 +27,7 @@ export type TableHeaderProps = {
 
 export type DataTablePropType = {
   loading?: boolean;
+  disableCheckbox?: boolean;
   rows: JSX.Element[];
   rowIds: string[];
   headCells: HeadCell[];

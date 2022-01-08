@@ -13,37 +13,37 @@ import { toast } from 'react-toastify';
 const headCells = [
   {
     id: 'name',
-    numeric: false,
+    position: 'center',
     disablePadding: true,
     label: 'User',
   },
   {
     id: 'email',
-    numeric: false,
+    position: 'center',
     disablePadding: false,
     label: 'Email',
   },
   {
     id: 'student_id',
-    numeric: true,
+    position: 'center',
     disablePadding: false,
     label: 'Student id',
   },
   {
     id: 'created_at',
-    numeric: true,
+    position: 'center',
     disablePadding: false,
     label: 'Join at',
   },
   {
     id: 'google_id',
-    numeric: true,
+    position: 'center',
     disablePadding: false,
     label: 'Others',
   },
   {
     id: 'action',
-    numeric: true,
+    position: 'center',
     disablePadding: false,
     label: 'Action',
   },
@@ -111,7 +111,7 @@ const UserList = () => {
   function createUserRecordRow(user: IUser): JSX.Element {
     return (
       <>
-        <TableCell scope="row" padding="none">
+        <TableCell scope="row" padding="none" align="center">
           <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar src={user.avatar} sizes="small" sx={userManagementSx.avatar} />
             <Link
@@ -127,17 +127,17 @@ const UserList = () => {
             </Link>
           </Stack>
         </TableCell>
-        <TableCell align="left">{user.email}</TableCell>
-        <TableCell align="right">{user.student_id}</TableCell>
-        <TableCell align="right">{Utils.displayDate(user.created_at as number)}</TableCell>
-        <TableCell align="right">
+        <TableCell align="center">{user.email}</TableCell>
+        <TableCell align="center">{user.student_id}</TableCell>
+        <TableCell align="center">{Utils.displayDate(user.created_at as number)}</TableCell>
+        <TableCell align="center">
           {user.google_id && (
             <Tooltip title={`This user is logged in using google (id=${user.google_id})`}>
               <img src={GgIcon} alt="gg icon" sizes="32" />
             </Tooltip>
           )}
         </TableCell>
-        <TableCell align="right">
+        <TableCell align="center">
           <PopupMenu
             items={[
               {

@@ -11,49 +11,49 @@ import { userManagementSx } from './style';
 const headCells = [
   {
     id: 'title',
-    numeric: false,
+    position: 'center',
     disablePadding: true,
     label: 'Title',
   },
   {
     id: 'subject',
-    numeric: true,
+    position: 'center',
     disablePadding: false,
     label: 'Subject',
   },
   {
     id: 'section',
-    numeric: true,
+    position: 'center',
     disablePadding: false,
     label: 'Section',
   },
   {
     id: 'room',
-    numeric: true,
+    position: 'center',
     disablePadding: false,
     label: 'Room',
   },
   {
     id: 'code',
-    numeric: true,
+    position: 'center',
     disablePadding: false,
     label: 'Code',
   },
   {
     id: 'users',
-    numeric: true,
+    position: 'center',
     disablePadding: false,
     label: 'Participants',
   },
   {
     id: 'created_at',
-    numeric: true,
+    position: 'center',
     disablePadding: false,
     label: 'Created at',
   },
   {
     id: 'action',
-    numeric: true,
+    position: 'center',
     disablePadding: false,
     label: 'Action',
   },
@@ -114,20 +114,20 @@ const ClassroomList = () => {
             </Link>
           </Stack>
         </TableCell>
-        <TableCell align="right">{classroom.subject}</TableCell>
-        <TableCell align="right">{classroom.section}</TableCell>
-        <TableCell align="right">{classroom.room}</TableCell>
-        <TableCell align="right">
+        <TableCell align="center">{classroom.subject}</TableCell>
+        <TableCell align="center">{classroom.section}</TableCell>
+        <TableCell align="center">{classroom.room}</TableCell>
+        <TableCell align="center">
           <Chip label={classroom.code} onClick={() => {}} size="small" />
         </TableCell>
-        <TableCell align="right">
+        <TableCell align="center">
           {/* {classroom.users.length} */}
           <Chip label={`${teacherCount} teachers`} color="success" size="small" variant="outlined" />{' '}
           <Chip label={`${studentCount} students`} color="primary" size="small" variant="outlined" />
           {/* {classroom.is_root ? <Chip label="Root" color="success" /> : <Chip label="Admin" color="warning" />} */}
         </TableCell>
-        <TableCell align="right">{Utils.displayDate(classroom.created_at as number)}</TableCell>
-        <TableCell align="right">
+        <TableCell align="center">{Utils.displayDate(classroom.created_at as number)}</TableCell>
+        <TableCell align="center">
           <PopupMenu
             items={[
               {
