@@ -1,13 +1,14 @@
 import { Block, Delete, Edit, More, MoreVert } from '@mui/icons-material';
-import { Avatar, Chip, IconButton, Link, Stack, TableCell, Tooltip, Typography } from '@mui/material';
+import { Avatar, Button, Chip, IconButton, Link, Stack, TableCell, TextField, Tooltip, Typography } from '@mui/material';
 import { IUser } from 'common/interfaces';
 import Utils from 'common/utils';
-import { AppBreadcrumbs, DataTable, PopupMenu, useLoading } from 'components';
+import { AppBreadcrumbs, DataTable, PopupMenu, SimpleModal, useLoading } from 'components';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useFetchAllUsersMutation } from 'services';
+import { useBanAccountMutation, useFetchAllUsersMutation } from 'services';
 import { userManagementSx } from './style';
 import GgIcon from 'assets/images/gg.svg';
+import { toast } from 'react-toastify';
 
 const headCells = [
   {
@@ -52,10 +53,14 @@ const UserList = () => {
   const navigate = useNavigate();
 
   const [fetchUsers, { data: getAllResponse, isLoading: isFetchingUsers }] = useFetchAllUsersMutation();
+  const [banUser, { isLoading: isBanning }] = useBanAccountMutation();
   const totalPage = getAllResponse?.total_page ?? 0;
   const userList = getAllResponse?.data ?? [];
   const rows = userList.map((user: IUser) => createUserRecordRow(user));
   const rowIds = userList.map((u: IUser) => u._id as string);
+
+  const [banTarget, setBanTarget] = React.useState<string | undefined>();
+  const [banReason, setBanReason] = React.useState<string>('');
 
   React.useEffect(() => {
     fetchUsers({
@@ -79,6 +84,28 @@ const UserList = () => {
       page: 1,
       per_page: 10,
     });
+  };
+
+  const handleBan = (id: string, reason: string) => {
+    banUser({ user_id: id, reason: reason })
+      .unwrap()
+      .then(() => {
+        toast.success('Account banned');
+        //Refetch
+        fetchUsers({
+          page: 0,
+          per_page: 5,
+        });
+      })
+      .catch((err) => {
+        toast.error('Operation failed! ' + err.data);
+      });
+    closeBanModal();
+  };
+
+  const closeBanModal = () => {
+    setBanReason('');
+    setBanTarget(undefined);
   };
 
   function createUserRecordRow(user: IUser): JSX.Element {
@@ -125,7 +152,7 @@ const UserList = () => {
                 icon: <Block color="warning" />,
                 colorMode: 'warning',
                 sx: { width: 150, color: 'warning.main' },
-                callback: () => console.log('Bann'),
+                callback: () => setBanTarget(user._id),
               },
               {
                 label: 'Delete',
@@ -167,6 +194,16 @@ const UserList = () => {
         total={totalPage}
         rowHeight={60}
       />
+
+      <SimpleModal open={Boolean(banTarget)} handleClose={closeBanModal} title="Block/Ban a user">
+        <>
+          <TextField sx={{ my: 1 }} label="Ban reason?" value={banReason} onChange={(ev: any) => setBanReason(ev.target.value)} />
+          <Stack direction="row" sx={{ my: 1 }} justifyContent="flex-end">
+            <Button onClick={closeBanModal}>Cancel</Button>
+            <Button onClick={() => handleBan(banTarget as string, banReason)}>Proceed</Button>
+          </Stack>
+        </>
+      </SimpleModal>
     </React.Fragment>
   );
 };

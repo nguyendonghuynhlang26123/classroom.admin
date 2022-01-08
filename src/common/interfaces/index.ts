@@ -6,3 +6,4 @@ export * from './assignments';
 export * from './upload';
 export * from './classStudents';
 export * from './admin';
+export * from './blacklist';
