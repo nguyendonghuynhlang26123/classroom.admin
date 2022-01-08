@@ -7,7 +7,7 @@ import Utils from 'common/utils';
 import { useAuth, useLoading, AppBreadcrumbs } from 'components';
 import { useFormik } from 'formik';
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useUploadImageMutation, useCreateAdminMutation } from 'services/api';
 import * as yup from 'yup';
@@ -30,6 +30,7 @@ const validationSchema = yup.object({
 });
 
 const AdminCreate = () => {
+  const navigate = useNavigate();
   const [uploadAvatar, { isLoading: isUploading }] = useUploadImageMutation();
   const [createAdmin, { isLoading: isCreating }] = useCreateAdminMutation();
   const [avatar, setAvatar] = React.useState<string | undefined>();
@@ -48,7 +49,8 @@ const AdminCreate = () => {
     onSubmit: (values) => {
       handleSave(values.email, values.name, values.password, uploadFile)
         .then(() => {
-          toast.success('Update succeed');
+          toast.success('Successfully created new Admin');
+          navigate('/admin-account');
         })
         .catch((err) => {
           toast.error('Update failed! ' + err.data);
@@ -68,7 +70,7 @@ const AdminCreate = () => {
     if (file) {
       form_data.append('image', file);
       const uploaded = await uploadAvatar(form_data).unwrap();
-      return await createAdmin({ name: name, email: email, password: password });
+      return await createAdmin({ name: name, email: email, password: password, avatar: uploaded.url });
     }
     return await createAdmin({ name: name, email: email, password: password });
   };
@@ -92,16 +94,16 @@ const AdminCreate = () => {
     <Box sx={userCreateSx.root}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <AppBreadcrumbs
-          title="Edit User"
-          label="Edit"
+          title="Create admin"
+          label="Create"
           list={[
             {
               href: '/',
               label: 'Home',
             },
             {
-              href: '/user-account',
-              label: 'User',
+              href: '/admin-account',
+              label: 'Admin',
             },
           ]}
         />

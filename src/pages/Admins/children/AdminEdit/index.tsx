@@ -96,8 +96,8 @@ const AdminEdit = () => {
               label: 'Home',
             },
             {
-              href: '/user-account',
-              label: 'User',
+              href: '/admin-account',
+              label: 'Admin',
             },
           ]}
         />
