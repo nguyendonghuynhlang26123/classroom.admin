@@ -179,7 +179,7 @@ const UserList = () => {
                 icon: <Delete color="error" />,
                 colorMode: 'error',
                 sx: { width: 150, color: 'error.main' },
-                callback: () => console.log('DELETE'),
+                callback: () => handleDelete([user._id as string]),
               },
             ]}
           >
@@ -205,7 +205,7 @@ const UserList = () => {
         ]}
       />
       <DataTable
-        deleteRows={(ids: string[]) => console.log(ids)}
+        deleteRows={handleDelete}
         loading={isFetchingUsers}
         headCells={headCells}
         rows={rows}
