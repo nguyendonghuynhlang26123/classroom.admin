@@ -3,16 +3,6 @@ import { DrawerItemConfigType } from 'common/type';
 
 export const drawerConfigs: DrawerItemConfigType[] = [
   {
-    title: 'Home',
-    icon: <HomeOutlined />,
-    href: '/',
-    type: 'item',
-  },
-  {
-    type: 'divider',
-    title: '',
-  },
-  {
     title: 'Account management',
     type: 'group',
     children: [

@@ -71,7 +71,7 @@ const appRoutes = (isAuthed: boolean, search: string, pathname: string): RouteCo
         {
           path: '/',
           index: true,
-          element: <Dashboard />,
+          element: <Navigate to="/user-account" />,
         },
         {
           path: '/user-account',

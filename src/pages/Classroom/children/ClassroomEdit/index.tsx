@@ -32,7 +32,6 @@ const defaultProps: IClassroomBody = {
 const ClassroomEdit = () => {
   const { classroomId } = useParams();
   const { data: classroomData, isLoading: isFetchingData } = useGetClassDetailsQuery(classroomId as string);
-  console.log('log ~ file: index.tsx ~ line 35 ~ ClassroomEdit ~ classroomData', classroomData);
   const [updateClassroom, { isLoading }] = useUpdateClassDetailsMutation();
   const [uploadImage, { isLoading: isUploading }] = useUploadImageMutation();
   const [avatar, setAvatar] = React.useState<string | undefined>(classroomData?.image);
