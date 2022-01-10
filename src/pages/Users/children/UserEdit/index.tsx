@@ -1,6 +1,6 @@
 //Profile
 import { PhotoCamera } from '@mui/icons-material';
-import { Avatar, Box, Button, Container, Grid, Stack, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, CircularProgress, Container, Grid, Stack, TextField, Typography } from '@mui/material';
 import { NAME_REGEX, STUDENT_ID_REGEX } from 'common/constants/regex';
 import { IUserBody } from 'common/interfaces';
 import Utils from 'common/utils';
@@ -39,7 +39,7 @@ const UserEdit = () => {
   const [uploadAvatar, { isLoading: isUploading }] = useUploadImageMutation();
   const [avatar, setAvatar] = React.useState<string | undefined>(userData?.avatar);
   const [uploadFile, setUploadFile] = React.useState<any>(null);
-  const [, setLoading] = useLoading();
+  const [loading, setLoading] = useLoading();
 
   const formik = useFormik({
     initialValues: {
@@ -56,6 +56,7 @@ const UserEdit = () => {
             toast.success('Update succeed');
           })
           .catch((err) => {
+            if (err.status === 409) formik.setFieldError('student_id', 'This id has been registered');
             toast.error('Update failed! ' + err.data);
           });
       }
@@ -83,9 +84,9 @@ const UserEdit = () => {
     if (file) {
       form_data.append('image', file);
       const uploaded = await uploadAvatar(form_data).unwrap();
-      return await updateProfile({ id: id, body: { ...values, avatar: uploaded.url } });
+      return updateProfile({ id: id, body: { ...values, avatar: uploaded.url } }).unwrap();
     }
-    return await updateProfile({ id: id, body: { ...values, avatar: undefined } });
+    return updateProfile({ id: id, body: { ...values, avatar: undefined } }).unwrap();
   };
 
   const handleSelectFile = (ev: any) => {
@@ -121,7 +122,14 @@ const UserEdit = () => {
           ]}
         />
         <Stack direction="row">
-          <Button variant="contained" onClick={() => formik.submitForm()}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              formik.submitForm();
+            }}
+            disabled={loading}
+            startIcon={loading && <CircularProgress size={16} />}
+          >
             Save
           </Button>
         </Stack>

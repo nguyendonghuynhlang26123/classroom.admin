@@ -1,4 +1,14 @@
-import { Block, Delete, Edit, More, MoreVert } from '@mui/icons-material';
+import {
+  Block,
+  Delete,
+  DoNotDisturbAltTwoTone,
+  DoNotDisturbOnTwoTone,
+  DoNotTouchTwoTone,
+  Edit,
+  MarkEmailReadTwoTone,
+  More,
+  MoreVert,
+} from '@mui/icons-material';
 import { Avatar, Button, Chip, IconButton, Link, Stack, TableCell, TextField, Tooltip, Typography } from '@mui/material';
 import { IUser } from 'common/interfaces';
 import Utils from 'common/utils';
@@ -31,16 +41,28 @@ const headCells: HeadCell[] = [
     label: 'Student id',
   },
   {
-    id: 'created_at',
-    position: 'center',
-    disablePadding: false,
-    label: 'Join at',
-  },
-  {
     id: 'google_id',
     position: 'center',
-    disablePadding: false,
-    label: 'Others',
+    disablePadding: true,
+    label: '',
+  },
+  {
+    id: 'is_activated',
+    position: 'center',
+    disablePadding: true,
+    label: '',
+  },
+  {
+    id: 'is_banned',
+    position: 'center',
+    disablePadding: true,
+    label: '',
+  },
+  {
+    id: 'created_at',
+    position: 'center',
+    disablePadding: true,
+    label: 'Join at',
   },
   {
     id: 'action',
@@ -149,13 +171,29 @@ const UserList = () => {
         </TableCell>
         <TableCell align="center">{user.email}</TableCell>
         <TableCell align="center">{user.student_id}</TableCell>
-        <TableCell align="center">{Utils.displayDate(user.created_at as number)}</TableCell>
-        <TableCell align="center">
+        <TableCell align="center" padding="none">
           {user.google_id && (
             <Tooltip title={`This user is logged in using google (id=${user.google_id})`}>
               <img src={GgIcon} alt="gg icon" sizes="32" />
             </Tooltip>
           )}
+        </TableCell>
+        <TableCell align="center" padding="none">
+          {user.is_activated && (
+            <Tooltip title={`This user is activated`}>
+              <MarkEmailReadTwoTone color="success" />
+            </Tooltip>
+          )}
+        </TableCell>
+        <TableCell align="center" padding="none">
+          {user.is_banned && (
+            <Tooltip title={`This account is blocked from using the app`}>
+              <DoNotDisturbOnTwoTone color="error" />
+            </Tooltip>
+          )}
+        </TableCell>
+        <TableCell align="center" padding="none">
+          {Utils.displayDate(user.created_at as number)}
         </TableCell>
         <TableCell align="center">
           <PopupMenu
@@ -206,7 +244,7 @@ const UserList = () => {
       />
       <DataTable
         deleteRows={handleDelete}
-        loading={isFetchingUsers}
+        loading={Utils.isLoading(isFetchingUsers, isDeleting, isBanning)}
         headCells={headCells}
         rows={rows}
         fetchData={fetchData}
@@ -225,6 +263,8 @@ const UserList = () => {
           </Stack>
         </>
       </SimpleModal>
+
+      <Dialog />
     </React.Fragment>
   );
 };

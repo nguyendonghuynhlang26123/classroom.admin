@@ -1,6 +1,6 @@
 //Profile
 import { PhotoCamera } from '@mui/icons-material';
-import { Avatar, Box, Button, Container, Grid, Stack, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, CircularProgress, Container, Grid, Stack, TextField, Typography } from '@mui/material';
 import { IClassroomBody } from 'common/interfaces';
 import Utils from 'common/utils';
 import { useAuth, useLoading, AppBreadcrumbs } from 'components';
@@ -34,18 +34,17 @@ const ClassroomEdit = () => {
   const { data: classroomData, isLoading: isFetchingData } = useGetClassDetailsQuery(classroomId as string);
   console.log('log ~ file: index.tsx ~ line 35 ~ ClassroomEdit ~ classroomData', classroomData);
   const [updateClassroom, { isLoading }] = useUpdateClassDetailsMutation();
-  const [uploadAvatar, { isLoading: isUploading }] = useUploadImageMutation();
+  const [uploadImage, { isLoading: isUploading }] = useUploadImageMutation();
   const [avatar, setAvatar] = React.useState<string | undefined>(classroomData?.image);
-  const [uploadFile, setUploadFile] = React.useState<any>(null);
-  const [, setLoading] = useLoading();
+  const [file, setUploadFile] = React.useState<any>(null);
+  const [loading, setLoading] = useLoading();
 
   const formik = useFormik<IClassroomBody>({
     initialValues: defaultProps,
     validateOnBlur: true,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      updateClassroom({ id: classroomId as string, body: values })
-        .unwrap()
+      handleUpdateData(classroomId as string, values, file)
         .then(() => {
           toast.success('Update class data completed');
         })
@@ -71,16 +70,16 @@ const ClassroomEdit = () => {
     }
   }, [classroomData]);
 
-  // const handleUpdateData = async (id: string, name: string, file: any) => {
-  //   let form_data = new FormData();
+  const handleUpdateData = async (id: string, values: IClassroomBody, file: any) => {
+    let form_data = new FormData();
 
-  //   if (file) {
-  //     form_data.append('image', file);
-  //     const uploaded = await uploadAvatar(form_data).unwrap();
-  //     return await updateClassroom({ id: id, body: { name: name, avatar: uploaded.url } });
-  //   }
-  //   return await updateClassroom({ id: id, body: { name: name, avatar: undefined } });
-  // };
+    if (file) {
+      form_data.append('image', file);
+      const uploaded = await uploadImage(form_data).unwrap();
+      return updateClassroom({ id: id, body: { ...values, image: uploaded.url } }).unwrap();
+    }
+    return updateClassroom({ id: id, body: { ...values, image: undefined } }).unwrap();
+  };
 
   const handleSelectFile = (ev: any) => {
     const file = ev?.target?.files[0];
@@ -115,7 +114,14 @@ const ClassroomEdit = () => {
           ]}
         />
         <Stack direction="row">
-          <Button variant="outlined" onClick={() => formik.submitForm()}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              formik.submitForm();
+            }}
+            disabled={loading}
+            startIcon={loading && <CircularProgress size={16} />}
+          >
             Save
           </Button>
         </Stack>

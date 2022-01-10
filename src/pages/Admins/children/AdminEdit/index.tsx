@@ -1,6 +1,6 @@
 //Profile
 import { PhotoCamera } from '@mui/icons-material';
-import { Avatar, Box, Button, Container, Grid, Stack, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, Container, Grid, Stack, TextField, CircularProgress } from '@mui/material';
 import { NAME_REGEX, STUDENT_ID_REGEX } from 'common/constants/regex';
 import { IUserBody } from 'common/interfaces';
 import Utils from 'common/utils';
@@ -24,7 +24,7 @@ const AdminEdit = () => {
   const [uploadAvatar, { isLoading: isUploading }] = useUploadImageMutation();
   const [avatar, setAvatar] = React.useState<string | undefined>(adminData?.avatar);
   const [uploadFile, setUploadFile] = React.useState<any>(null);
-  const [, setLoading] = useLoading();
+  const [loading, setLoading] = useLoading();
 
   const formik = useFormik({
     initialValues: {
@@ -64,9 +64,9 @@ const AdminEdit = () => {
     if (file) {
       form_data.append('image', file);
       const uploaded = await uploadAvatar(form_data).unwrap();
-      return await updateAdmin({ id: id, body: { name: name, avatar: uploaded.url } });
+      return updateAdmin({ id: id, body: { name: name, avatar: uploaded.url } }).unwrap();
     }
-    return await updateAdmin({ id: id, body: { name: name, avatar: undefined } });
+    return updateAdmin({ id: id, body: { name: name, avatar: undefined } }).unwrap();
   };
 
   const handleSelectFile = (ev: any) => {
@@ -102,7 +102,14 @@ const AdminEdit = () => {
           ]}
         />
         <Stack direction="row">
-          <Button variant="outlined" onClick={() => formik.submitForm()}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              formik.submitForm();
+            }}
+            disabled={loading}
+            startIcon={loading && <CircularProgress size={16} />}
+          >
             Save
           </Button>
         </Stack>
