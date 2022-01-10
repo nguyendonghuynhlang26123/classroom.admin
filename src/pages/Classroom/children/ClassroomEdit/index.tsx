@@ -1,14 +1,14 @@
 //Profile
 import { PhotoCamera } from '@mui/icons-material';
-import { Avatar, Box, Button, CircularProgress, Container, Grid, Stack, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, CircularProgress, Stack, TextField } from '@mui/material';
 import { IClassroomBody } from 'common/interfaces';
 import Utils from 'common/utils';
-import { useAuth, useLoading, AppBreadcrumbs } from 'components';
+import { AppBreadcrumbs, useLoading } from 'components';
 import { useFormik } from 'formik';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useUploadImageMutation, useGetClassDetailsQuery, useUpdateClassDetailsMutation } from 'services/api';
+import { useGetClassDetailsQuery, useUpdateClassDetailsMutation, useUploadImageMutation } from 'services/api';
 import * as yup from 'yup';
 import { classroomEditSx } from './style';
 

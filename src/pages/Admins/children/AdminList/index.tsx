@@ -1,14 +1,14 @@
-import { Block, Delete, Edit, More, MoreVert } from '@mui/icons-material';
-import { Avatar, Chip, IconButton, Link, Stack, TableCell, Button } from '@mui/material';
+import { Delete, Edit, MoreVert } from '@mui/icons-material';
+import { Avatar, Button, Chip, IconButton, Link, Stack, TableCell } from '@mui/material';
 import { IAdmin } from 'common/interfaces';
 import Utils from 'common/utils';
 import { AppBreadcrumbs, DataTable, PopupMenu, useDialog } from 'components';
 import { HeadCell } from 'components/DataTable/type';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useDeleteAdminMutation, useFetchAllAdminsMutation } from 'services';
 import { userManagementSx } from './style';
-import { toast } from 'react-toastify';
 
 const headCells: HeadCell[] = [
   {

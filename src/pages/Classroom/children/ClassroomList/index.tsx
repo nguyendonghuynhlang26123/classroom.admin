@@ -1,5 +1,5 @@
-import { Block, Delete, Edit, More, MoreVert } from '@mui/icons-material';
-import { Avatar, Chip, IconButton, Link, Stack, TableCell, Button } from '@mui/material';
+import { Delete, Edit, MoreVert } from '@mui/icons-material';
+import { Button, Chip, IconButton, Link, Stack, TableCell } from '@mui/material';
 import { IClassroom, IClassroomUser, UserRole } from 'common/interfaces';
 import Utils from 'common/utils';
 import { AppBreadcrumbs, DataTable, PopupMenu, useDialog } from 'components';
@@ -66,7 +66,7 @@ const ClassroomList = () => {
   const [showDialog, Dialog] = useDialog();
 
   const [fetchClassrooms, { data: getAllResponse, isLoading: isFetching }] = useFetchAllClassesMutation();
-  const [deleteClassroom, { isLoading: isDeleting }] = useDeleteClassroomMutation();
+  const [deleteClassroom] = useDeleteClassroomMutation();
   const totalPage = getAllResponse?.total_page ?? 0;
   const classroomList = getAllResponse?.data ?? [];
   const rows = classroomList.map((c: IClassroom) => createClassroomRecordRow(c));

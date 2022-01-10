@@ -1,8 +1,7 @@
-import React from 'react';
-import Button from '@mui/material/Button';
+import { ListItemIcon, ListItemText } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { ListItemIcon, ListItemText, Typography } from '@mui/material';
+import React from 'react';
 
 export type PopupMenuPropType = {
   children: JSX.Element;

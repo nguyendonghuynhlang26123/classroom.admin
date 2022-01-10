@@ -1,25 +1,15 @@
-import {
-  Block,
-  Delete,
-  DoNotDisturbAltTwoTone,
-  DoNotDisturbOnTwoTone,
-  DoNotTouchTwoTone,
-  Edit,
-  MarkEmailReadTwoTone,
-  More,
-  MoreVert,
-} from '@mui/icons-material';
-import { Avatar, Button, Chip, IconButton, Link, Stack, TableCell, TextField, Tooltip, Typography } from '@mui/material';
+import { Block, Delete, DoNotDisturbOnTwoTone, Edit, MarkEmailReadTwoTone, MoreVert } from '@mui/icons-material';
+import { Avatar, Button, IconButton, Link, Stack, TableCell, TextField, Tooltip } from '@mui/material';
+import GgIcon from 'assets/images/gg.svg';
 import { IUser } from 'common/interfaces';
 import Utils from 'common/utils';
-import { AppBreadcrumbs, DataTable, PopupMenu, SimpleModal, useDialog, useLoading } from 'components';
+import { AppBreadcrumbs, DataTable, PopupMenu, SimpleModal, useDialog } from 'components';
+import { HeadCell } from 'components/DataTable/type';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useBanAccountMutation, useDeleteUserMutation, useFetchAllUsersMutation } from 'services';
 import { userManagementSx } from './style';
-import GgIcon from 'assets/images/gg.svg';
-import { toast } from 'react-toastify';
-import { HeadCell } from 'components/DataTable/type';
 
 const headCells: HeadCell[] = [
   {

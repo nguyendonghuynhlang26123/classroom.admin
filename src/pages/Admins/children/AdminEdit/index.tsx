@@ -1,15 +1,13 @@
 //Profile
 import { PhotoCamera } from '@mui/icons-material';
-import { Avatar, Box, Button, Container, Grid, Stack, TextField, CircularProgress } from '@mui/material';
-import { NAME_REGEX, STUDENT_ID_REGEX } from 'common/constants/regex';
-import { IUserBody } from 'common/interfaces';
+import { Avatar, Box, Button, CircularProgress, Stack, TextField } from '@mui/material';
 import Utils from 'common/utils';
-import { useAuth, useLoading, AppBreadcrumbs } from 'components';
+import { AppBreadcrumbs, useLoading } from 'components';
 import { useFormik } from 'formik';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useUploadImageMutation, useGetAdminDetailsQuery, useUpdateAdminAccountMutation } from 'services/api';
+import { useGetAdminDetailsQuery, useUpdateAdminAccountMutation, useUploadImageMutation } from 'services/api';
 import * as yup from 'yup';
 import { userEditSx } from './style';
 

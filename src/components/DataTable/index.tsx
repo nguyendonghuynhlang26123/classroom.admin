@@ -1,20 +1,9 @@
-import {
-  Box,
-  Checkbox,
-  LinearProgress,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TablePagination,
-  TableRow,
-} from '@mui/material';
+import { Checkbox, LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow } from '@mui/material';
 import React from 'react';
+import { tableSx } from './style';
 import { TableHeader } from './TableHeader';
 import { TableToolbar } from './TableToolbar';
 import { DataTablePropType } from './type';
-import { tableSx } from './style';
 
 export const DataTable = (props: DataTablePropType) => {
   const { loading, rows, rowIds, headCells, fetchData, total, searchData, rowHeight, disableCheckbox, deleteRows } = props;

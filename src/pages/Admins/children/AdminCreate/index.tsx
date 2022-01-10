@@ -1,15 +1,13 @@
 //Profile
 import { PhotoCamera } from '@mui/icons-material';
-import { Avatar, Box, Button, Container, Grid, Stack, TextField, Typography } from '@mui/material';
-import { NAME_REGEX, STUDENT_ID_REGEX } from 'common/constants/regex';
-import { IUserBody } from 'common/interfaces';
+import { Avatar, Box, Button, Stack, TextField } from '@mui/material';
 import Utils from 'common/utils';
-import { useAuth, useLoading, AppBreadcrumbs } from 'components';
+import { AppBreadcrumbs, useLoading } from 'components';
 import { useFormik } from 'formik';
 import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useUploadImageMutation, useCreateAdminMutation } from 'services/api';
+import { useCreateAdminMutation, useUploadImageMutation } from 'services/api';
 import * as yup from 'yup';
 import { userCreateSx } from './style';
 

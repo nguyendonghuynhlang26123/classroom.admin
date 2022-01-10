@@ -1,14 +1,7 @@
 //Profile
-import { PhotoCamera } from '@mui/icons-material';
-import { Avatar, Box, Container, Grid, Stack, TextField, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { NAME_REGEX, STUDENT_ID_REGEX } from 'common/constants/regex';
-import { IUserBody } from 'common/interfaces';
-import Utils from 'common/utils';
-import { useAuth, useLoading } from 'components';
-import { useFormik } from 'formik';
 import React from 'react';
-import { toast } from 'react-toastify';
-import { useUpdateUserDataMutation, useUploadImageMutation } from 'services/api';
 import * as yup from 'yup';
 import { profileSx } from './style';
 

@@ -1,10 +1,10 @@
-import { Toolbar, Typography, Tooltip, IconButton, Box, InputBase, Divider, Chip } from '@mui/material';
-import { FilterList, Delete, Search, Close } from '@mui/icons-material';
+import { Close, Delete, Search } from '@mui/icons-material';
+import { Box, IconButton, InputBase, Toolbar, Tooltip, Typography } from '@mui/material';
 import { alpha } from '@mui/material/styles';
-import React from 'react';
-import { TableToolbarProps } from './type';
-import { toolbarSx } from './style';
 import { useDebounce } from 'components';
+import React from 'react';
+import { toolbarSx } from './style';
+import { TableToolbarProps } from './type';
 
 export const TableToolbar = (props: TableToolbarProps) => {
   const { numSelected, handleSearch, handleDelete } = props;
